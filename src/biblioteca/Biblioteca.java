@@ -1,5 +1,7 @@
 
 package biblioteca;
+import biblioteca.Model.Libro;
+
 import javax.swing.JOptionPane;
 
 public class Biblioteca {

@@ -1,5 +1,5 @@
 
-package biblioteca;
+package biblioteca.Model;
 
 
 public class Libro {

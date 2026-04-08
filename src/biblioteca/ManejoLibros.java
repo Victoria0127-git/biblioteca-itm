@@ -2,6 +2,8 @@
 package biblioteca;
 
 
+import biblioteca.Model.Libro;
+
 import javax.swing.*;
 
 public class ManejoLibros {
