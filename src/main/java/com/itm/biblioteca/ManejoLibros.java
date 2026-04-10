@@ -1,8 +1,6 @@
 
-package biblioteca;
+package com.itm.biblioteca;
 
-
-import biblioteca.Model.Libro;
 
 import javax.swing.*;
 

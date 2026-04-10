@@ -1,5 +1,5 @@
 
-package biblioteca;
+package com.itm.biblioteca;
 
 import javax.swing.*;
 
