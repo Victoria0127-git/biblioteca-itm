@@ -1,44 +1,35 @@
 package com.itm.biblioteca.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
-@Table(name = "Libro")
+@Table (name = "Libro")
 public class Libro {
     @Id
-    @
-    private Long id;
-
-    private String libro;
-    private String autor;
+    @Column(name = "ISBN")
     private String isbn;
-    private boolean prestado;
+
+    @Column(name = "Titulo")
+    private String titulo;
+
+    @Column(name = "NumPag")
+    private int numPag;
+
+    @ManyToOne //Llave foranea
+    @JoinColumn(name = "ID_Editorial") Editorial editorial;
+
 
     public Libro() {
     }
 
-    public Libro(String libro, String autor, String isbn, boolean prestado) {
-        this.libro = libro;
-        this.autor = autor;
+    public Libro(String isbn, String titulo, int numPag, Editorial editorial) {
         this.isbn = isbn;
-        this.prestado = prestado;
+        this.titulo = titulo;
+        this.numPag = numPag;
+        this.editorial = editorial;
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getLibro() { return libro; }
-    public void setLibro(String libro) { this.libro = libro; }
-
-    public String getAutor() { return autor; }
-    public void setAutor(String autor) { this.autor = autor; }
-
-    public String getIsbn() { return isbn; }
-    public void setIsbn(String isbn) { this.isbn = isbn; }
-
-    public boolean isPrestado() { return prestado; }
-    public void setPrestado(boolean prestado) { this.prestado = prestado; }
 }
