@@ -1,14 +1,15 @@
-package com.itm.biblioteca;
+package com.itm.biblioteca.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 
 @Entity
-@Table(name = "libros")
+@Table(name = "Libro")
 public class Libro {
-
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @
     private Long id;
 
     private String libro;

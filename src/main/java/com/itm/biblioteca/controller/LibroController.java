@@ -1,6 +1,6 @@
 package com.itm.biblioteca.controller;
 
-import com.itm.biblioteca.Libro;
+import com.itm.biblioteca.model.Libro;
 import com.itm.biblioteca.repository.LibroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

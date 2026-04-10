@@ -1,4 +1,4 @@
-package biblioteca.Util;
+package com.itm.biblioteca.util;
 
 public class MiembroQueries {
     public static final String INSERT = "INSERT INTO Miembros (nombre, apellido, direccion, telefono) VALUES (?, ?, ?, ?)";

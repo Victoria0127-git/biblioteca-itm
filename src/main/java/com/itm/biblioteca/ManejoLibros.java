@@ -2,6 +2,8 @@
 package com.itm.biblioteca;
 
 
+import com.itm.biblioteca.model.Libro;
+
 import javax.swing.*;
 
 public class ManejoLibros {
