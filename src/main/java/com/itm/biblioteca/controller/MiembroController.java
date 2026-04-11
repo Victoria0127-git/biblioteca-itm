@@ -21,11 +21,18 @@ public class MiembroController {
 
     @PostMapping
     public Miembro crearMiembro(@RequestBody Miembro miembro) {
+        
         return miembroRepository.save(miembro);
     }
 
     @GetMapping("/{id}")
-    public Miembro obtenerPorId(@PathVariable Long id) {
+    public Miembro obtenerPorId(@PathVariable Integer id) {
         return miembroRepository.findById(id).orElse(null);
+    }
+
+
+    @DeleteMapping("/{id}")
+    public void eliminarMiembro(@PathVariable Integer id) {
+        miembroRepository.deleteById(id);
     }
 }
