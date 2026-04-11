@@ -1,6 +1,8 @@
 
-package biblioteca;
+package com.itm.biblioteca;
 import javax.swing.JOptionPane;
+import com.itm.biblioteca.model.Libro;
+import com.itm.biblioteca.model.Miembro;
 
 public class Biblioteca {
 
