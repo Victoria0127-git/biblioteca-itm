@@ -21,22 +21,41 @@ public class MiembroServiceImpl implements IMiembroService {
     }
 
     @Override
-    public Optional<Miembro> buscarPorId(Long id) {
-        return miembroRepository.findById(id);
-    }
-
-    @Override
     public Miembro guardar(Miembro miembro) {
-        // Ejemplo de lógica de negocio:
-        // Podrías validar que el teléfono no sea nulo antes de guardar
-        if (miembro.getTelefono() == null) {
-            throw new RuntimeException("El teléfono es obligatorio para el registro");
+        // 1. Verificación de nulidad
+        if (miembro == null) {
+            throw new IllegalArgumentException("El miembro no puede ser nulo.");
         }
+
+        // 2. Verificación de campos obligatorios (Ejemplo con el nombre)
+        if (miembro.getNombre() == null || miembro.getNombre().isEmpty()) {
+            throw new RuntimeException("El nombre del miembro es obligatorio.");
+        }
+
+        // 3. Verificación de duplicados (Suponiendo que el ID es el documento único)
+        if (miembroRepository.existsById(miembro.getIdMiembro())) {
+            // Aquí podrías decidir si quieres actualizar o lanzar error
+            // Por ahora, lo guardamos (save en JPA actualiza si el ID ya existe)
+        }
+
         return miembroRepository.save(miembro);
     }
 
     @Override
-    public void eliminar(Long id) {
+    public Optional<Miembro> buscarPorId(String id) {
+        // Verificamos que el ID no venga vacío
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("El ID proporcionado no es válido.");
+        }
+        return miembroRepository.findById(id);
+    }
+
+    @Override
+    public void eliminar(String id) {
+        // Verificamos si existe antes de intentar borrar
+        if (!miembroRepository.existsById(id)) {
+            throw new RuntimeException("No se puede eliminar: El miembro con ID " + id + " no existe.");
+        }
         miembroRepository.deleteById(id);
     }
 }
