@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MiembroRepository extends JpaRepository<Miembro, Long> {
-    // Aquí puedes agregar métodos personalizados si los necesitas
-    // Ejemplo: Miembro findByDni(String dni);
 }
