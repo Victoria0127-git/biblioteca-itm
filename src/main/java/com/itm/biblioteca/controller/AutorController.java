@@ -3,8 +3,8 @@ package com.itm.biblioteca.controller;
 import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.repository.AutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*; 
-import java.util.List; 
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/autores")
