@@ -1,5 +1,6 @@
 package com.itm.biblioteca.service.impl;
 
+import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Prestamo;
 import com.itm.biblioteca.repository.PrestamoRepository;
 import com.itm.biblioteca.service.IPrestamoService;
@@ -28,10 +29,15 @@ public class PrestamoServiceImpl implements IPrestamoService {
 
     @Override
     @Transactional
-    public Prestamo guardar(Prestamo prestamo) {
+    public Prestamo crear(Prestamo prestamo) {
         // 1. Verificación: ¿Vienen los objetos relacionados?
         if (prestamo.getMiembro() == null || prestamo.getEjemplar() == null || prestamo.getBibliotecario() == null) {
             throw new RuntimeException("Error: Un préstamo debe tener un miembro, un ejemplar y un bibliotecario asignado.");
+        }
+
+        if (prestamoRepository.existsById(prestamo.getIdPrestamo()))
+        {
+            throw new RuntimeException("Ya existe prestamo con id "+prestamo.getIdPrestamo());
         }
 
         // 2. Verificación: Fechas lógicas
@@ -39,10 +45,22 @@ public class PrestamoServiceImpl implements IPrestamoService {
             throw new RuntimeException("La fecha de devolución no puede ser anterior a la fecha de préstamo.");
         }
 
-        // 3. Lógica extra (Opcional): Aquí podrías verificar si el ejemplar está disponible
-        // antes de guardar, llamando a ejemplarRepository.findById(...)
-
         return prestamoRepository.save(prestamo);
+    }
+
+    @Override
+    public Prestamo actualizar(String id, Prestamo prestamoActual){
+        return prestamoRepository.findById(id).
+                map(prestamoExistente -> {
+                    prestamoExistente.setFechaPrestamo(prestamoActual.getFechaPrestamo());
+                    prestamoExistente.setFechaDevolucion(prestamoActual.getFechaDevolucion());
+                    prestamoExistente.setMiembro(prestamoActual.getMiembro());
+                    prestamoExistente.setBibliotecario(prestamoActual.getBibliotecario());
+                    prestamoExistente.setEjemplar(prestamoActual.getEjemplar());
+
+                    return prestamoRepository.save(prestamoExistente);
+                })
+                .orElseThrow(()-> new RuntimeException("El prestamo con el ID "+id+" no existe"));
     }
 
     @Override
