@@ -1,5 +1,6 @@
 package com.itm.biblioteca.controller;
 
+import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Miembro;
 import com.itm.biblioteca.service.IMiembroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,22 @@ public class MiembroController {
     @PostMapping
     public ResponseEntity<?> crearMiembro(@RequestBody Miembro miembro) {
         try {
-            Miembro guardada = miembroService.guardar(miembro);
+            Miembro guardada = miembroService.crear(miembro);
             return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
         } catch (RuntimeException e) {
             // Captura errores de validación definidos en la capa de servicio
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarMiembro(@PathVariable String id, @RequestBody Miembro miembro) {
+        try {
+            Miembro actualizado = miembroService.actualizar(id, miembro);
+            return ResponseEntity.ok(actualizado);
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

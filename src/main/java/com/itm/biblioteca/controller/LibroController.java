@@ -1,5 +1,6 @@
 package com.itm.biblioteca.controller;
 
+import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Libro;
 import com.itm.biblioteca.service.ILibroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,22 @@ public class LibroController {
     @PostMapping
     public ResponseEntity<?> crearLibro(@RequestBody Libro libro) {
         try {
-            Libro guardada = libroService.guardar(libro);
+            Libro guardada = libroService.crear(libro);
             return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
         } catch (RuntimeException e) {
             // Captura errores de validación definidos en la capa de servicio
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{isbn}")
+    public ResponseEntity<?> actualizarLibro(@PathVariable String isbn, @RequestBody Libro libro) {
+        try {
+            Libro actualizado = libroService.actualizar(isbn, libro);
+            return ResponseEntity.ok(actualizado);
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
