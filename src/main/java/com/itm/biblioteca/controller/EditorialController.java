@@ -1,5 +1,6 @@
 package com.itm.biblioteca.controller;
 
+import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Editorial;
 import com.itm.biblioteca.service.IEditorialService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,22 @@ public class EditorialController {
     @PostMapping
     public ResponseEntity<?> crearEditorial(@RequestBody Editorial editorial) {
         try {
-            Editorial guardada = editorialService.guardar(editorial);
+            Editorial guardada = editorialService.crear(editorial);
             return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
         } catch (RuntimeException e) {
             // Captura errores de validación definidos en la capa de servicio
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarEditorial(@PathVariable String id, @RequestBody Editorial editorial) {
+        try {
+            Editorial actualizado = editorialService.actualizar(id, editorial);
+            return ResponseEntity.ok(actualizado);
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

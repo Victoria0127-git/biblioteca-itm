@@ -31,11 +31,22 @@ public class AutorController {
     @PostMapping
     public ResponseEntity<?> crearAutor(@RequestBody Autor autor) {
         try {
-            Autor guardado = autorService.guardar(autor);
+            Autor guardado = autorService.crear(autor);
             return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
         } catch (RuntimeException e) {
             // Atrapamos errores de validación o lógica del Service
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarAutor(@PathVariable String id, @RequestBody Autor autor) {
+        try {
+            Autor actualizado = autorService.actualizar(id, autor);
+            return ResponseEntity.ok(actualizado);
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

@@ -23,6 +23,9 @@ public class Miembro {
     @Column(name = "Apellido")
     private String apellido;
 
+    @Column(name = "Correo")
+    private String correo;
+
     @Column(name = "Direccion")
     private String direccion;
 
@@ -33,10 +36,11 @@ public class Miembro {
     public Miembro() {}
 
     // 2. Constructor con parámetros
-    public Miembro(String idMiembro, String nombre, String apellido, String direccion, String telefono) {
+    public Miembro(String idMiembro, String nombre, String apellido, String correo, String direccion, String telefono) {
         this.idMiembro = idMiembro;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.correo = correo;
         this.direccion = direccion;
         this.telefono = telefono;
     }

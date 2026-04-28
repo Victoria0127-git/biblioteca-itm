@@ -1,5 +1,4 @@
 package com.itm.biblioteca.service.impl;
-
 import com.itm.biblioteca.model.Miembro;
 import com.itm.biblioteca.repository.MiembroRepository;
 import com.itm.biblioteca.service.IMiembroService;
@@ -21,10 +20,14 @@ public class MiembroServiceImpl implements IMiembroService {
     }
 
     @Override
-    public Miembro guardar(Miembro miembro) {
+    public Miembro crear(Miembro miembro) {
         // 1. Verificación de nulidad
         if (miembro == null) {
             throw new IllegalArgumentException("El miembro no puede ser nulo.");
+        }
+
+        if (miembroRepository.existsById(miembro.getIdMiembro())){
+            throw new IllegalArgumentException("El miembro existe en el sistema.");
         }
 
         // 2. Verificación de campos obligatorios (Ejemplo con el nombre)
@@ -32,13 +35,22 @@ public class MiembroServiceImpl implements IMiembroService {
             throw new RuntimeException("El nombre del miembro es obligatorio.");
         }
 
-        // 3. Verificación de duplicados (Suponiendo que el ID es el documento único)
-        if (miembroRepository.existsById(miembro.getIdMiembro())) {
-            // Aquí podrías decidir si quieres actualizar o lanzar error
-            // Por ahora, lo guardamos (save en JPA actualiza si el ID ya existe)
-        }
-
         return miembroRepository.save(miembro);
+    }
+
+    @Override
+    public Miembro actualizar(String id, Miembro miembroActual){
+        return miembroRepository.findById(id).
+                map(miembroExistente -> {
+                    miembroExistente.setNombre(miembroActual.getNombre());
+                    miembroExistente.setApellido(miembroActual.getApellido());
+                    miembroExistente.setCorreo(miembroActual.getCorreo());
+                    miembroExistente.setDireccion( miembroActual.getDireccion());
+                    miembroExistente.setTelefono(miembroActual.getTelefono());
+
+                    return miembroRepository.save(miembroExistente);
+                })
+                .orElseThrow(()-> new RuntimeException("El miembro con el ID "+id+" no existe"));
     }
 
     @Override

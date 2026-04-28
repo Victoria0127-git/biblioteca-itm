@@ -29,10 +29,14 @@ public class EditorialServiceImpl implements IEditorialService {
     }
 
     @Override
-    public Editorial guardar(Editorial editorial) {
+    public Editorial crear(Editorial editorial) {
         // 1. Validar que el objeto no sea nulo
         if (editorial == null) {
             throw new RuntimeException("No se puede guardar una editorial nula.");
+        }
+
+        if (editorialRepository.existsById(editorial.getId())) {
+            throw new IllegalArgumentException("El editorial ya existe");
         }
 
         // 2. Validar campos obligatorios
@@ -50,6 +54,19 @@ public class EditorialServiceImpl implements IEditorialService {
         }
 
         return editorialRepository.save(editorial);
+    }
+
+    @Override
+    public Editorial actualizar(String id, Editorial editorialActual){
+        return editorialRepository.findById(id).
+                map(editorialExistente -> {
+                    editorialExistente.setNombre(editorialActual.getNombre());
+                    editorialExistente.setDireccion(editorialActual.getDireccion());
+                    editorialExistente.setTelefono(editorialActual.getTelefono());
+
+                    return editorialRepository.save(editorialExistente);
+                })
+                .orElseThrow(()-> new RuntimeException("La editorial con el ID "+id+" no existe"));
     }
 
     @Override

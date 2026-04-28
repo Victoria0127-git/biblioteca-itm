@@ -1,5 +1,6 @@
 package com.itm.biblioteca.controller;
 
+import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Bibliotecario;
 import com.itm.biblioteca.service.IBibliotecarioService; // Usamos la interfaz
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,22 @@ public class BibliotecarioController {
     @PostMapping
     public ResponseEntity<?> crearBibliotecario(@RequestBody Bibliotecario bibliotecario) {
         try {
-            Bibliotecario guardado = bibliotecarioService.guardar(bibliotecario);
+            Bibliotecario guardado = bibliotecarioService.crear(bibliotecario);
             return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
         } catch (RuntimeException e) {
             // Si el validador del Service lanza error, aquí lo atrapamos
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarBibliotecario(@PathVariable String id, @RequestBody Bibliotecario bibliotecario) {
+        try {
+            Bibliotecario actualizado = bibliotecarioService.actualizar(id, bibliotecario);
+            return ResponseEntity.ok(actualizado);
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

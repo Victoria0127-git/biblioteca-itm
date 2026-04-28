@@ -1,5 +1,6 @@
 package com.itm.biblioteca.controller;
 
+import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Prestamo;
 import com.itm.biblioteca.service.IPrestamoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,22 @@ public class PrestamoController {
     @PostMapping
     public ResponseEntity<?> crearPrestamo(@RequestBody Prestamo prestamo) {
         try {
-            Prestamo guardada = prestamoService.guardar(prestamo);
+            Prestamo guardada = prestamoService.crear(prestamo);
             return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
         } catch (RuntimeException e) {
             // Captura errores de validación definidos en la capa de servicio
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarPrestamo(@PathVariable String id, @RequestBody Prestamo prestamo) {
+        try {
+            Prestamo actualizado = prestamoService.actualizar(id, prestamo);
+            return ResponseEntity.ok(actualizado);
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

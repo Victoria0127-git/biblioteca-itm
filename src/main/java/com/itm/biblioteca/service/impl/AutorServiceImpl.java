@@ -29,10 +29,15 @@ public class AutorServiceImpl implements IAutorService {
     }
 
     @Override
-    public Autor guardar(Autor autor) {
+    public Autor crear(Autor autor) {
         // 1. Validar que el objeto no sea nulo
         if (autor == null) {
             throw new RuntimeException("No se puede guardar un autor nulo.");
+        }
+
+        //Verificar que no exista
+        if (autorRepository.existsById(autor.getIdAutor())){
+            throw new RuntimeException("Ya existe un autor con el ID: "+autor.getIdAutor());
         }
 
         // 2. Validar campos obligatorios
@@ -53,6 +58,19 @@ public class AutorServiceImpl implements IAutorService {
         }
 
         return autorRepository.save(autor);
+    }
+
+    @Override
+    public Autor actualizar(String id, Autor autorActualizado){
+        return autorRepository.findById(id).
+                map(autorExistente -> {
+                    autorExistente.setNombre(autorActualizado.getNombre());
+                    autorExistente.setApellido(autorActualizado.getApellido());
+                    autorExistente.setNacionalidad(autorActualizado.getNacionalidad());
+
+                    return autorRepository.save(autorExistente);
+                })
+                .orElseThrow(()-> new RuntimeException("El autor con el ID "+id+" no existe"));
     }
 
     @Override

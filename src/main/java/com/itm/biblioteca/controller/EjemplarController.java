@@ -1,5 +1,6 @@
 package com.itm.biblioteca.controller;
 
+import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Ejemplar;
 import com.itm.biblioteca.service.IEjemplarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,22 @@ public class EjemplarController {
     @PostMapping
     public ResponseEntity<?> crearEjemplar(@RequestBody Ejemplar ejemplar) {
         try {
-            Ejemplar guardada = ejemplarService.guardar(ejemplar);
+            Ejemplar guardada = ejemplarService.crear(ejemplar);
             return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
         } catch (RuntimeException e) {
             // Captura errores de validación definidos en la capa de servicio
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarEjemplar(@PathVariable String id, @RequestBody Ejemplar ejemplar) {
+        try {
+            Ejemplar actualizado = ejemplarService.actualizar(id, ejemplar);
+            return ResponseEntity.ok(actualizado);
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

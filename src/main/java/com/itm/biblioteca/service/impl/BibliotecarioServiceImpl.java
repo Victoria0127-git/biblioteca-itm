@@ -1,5 +1,6 @@
 package com.itm.biblioteca.service.impl;
 
+import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Bibliotecario;
 import com.itm.biblioteca.repository.BibliotecarioRepository;
 import com.itm.biblioteca.service.IBibliotecarioService;
@@ -29,10 +30,14 @@ public class BibliotecarioServiceImpl implements IBibliotecarioService {
     }
 
     @Override
-    public Bibliotecario guardar(Bibliotecario bibliotecario) {
+    public Bibliotecario crear(Bibliotecario bibliotecario) {
         // 1. Validar que el objeto no sea nulo
         if (bibliotecario == null) {
             throw new RuntimeException("No se puede guardar un ID nulo.");
+        }
+
+        if (bibliotecarioRepository.existsById(bibliotecario.getIdBibliotecario())){
+            throw new RuntimeException("Ya existe el bibliotecario con el ID: "+bibliotecario.getIdBibliotecario());
         }
 
         // 2. Validar campos obligatorios
@@ -49,6 +54,18 @@ public class BibliotecarioServiceImpl implements IBibliotecarioService {
         }
 
         return bibliotecarioRepository.save(bibliotecario);
+    }
+
+    @Override
+    public Bibliotecario actualizar(String id, Bibliotecario biblioActualizado){
+        return bibliotecarioRepository.findById(id).
+                map(biblioExistente -> {
+                    biblioExistente.setNombre(biblioActualizado.getNombre());
+                    biblioExistente.setApellido(biblioActualizado.getApellido());
+
+                    return bibliotecarioRepository.save(biblioExistente);
+                })
+                .orElseThrow(()-> new RuntimeException("El bibliotecario con el ID "+id+" no existe"));
     }
 
     @Override

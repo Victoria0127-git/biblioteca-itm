@@ -6,6 +6,7 @@ import java.util.Optional;
 public interface IBaseService<T, ID> {
     List<T> listarTodos();
     Optional<T> buscarPorId(ID id);
-    T guardar(T entidad);
+    T crear(T entidad);
+    T actualizar(ID id, T  entidad);
     void eliminar(ID id);
 }

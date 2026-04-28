@@ -30,10 +30,15 @@ public class LibroServiceImpl implements ILibroService {
     }
 
     @Override
-    public Libro guardar(Libro libro) {
+    public Libro crear(Libro libro) {
         // Verificaciones de negocio para Libro
         if (libro.getIsbn() == null || libro.getIsbn().length() < 10) {
             throw new RuntimeException("El ISBN debe tener un formato válido.");
+        }
+
+        //Si ya existe, no lo crea (esa función es de actualizar)
+        if (libroRepository.existsById(libro.getIsbn())){
+            throw new RuntimeException("Ya existe un libro registrado con el ISBN: "+libro.getIsbn());
         }
 
         if (libro.getTitulo() == null || libro.getTitulo().isEmpty()) {
@@ -46,6 +51,20 @@ public class LibroServiceImpl implements ILibroService {
         }
 
         return libroRepository.save(libro);
+    }
+
+    @Override
+    public Libro actualizar(String isbn, Libro libroActualizado) {
+        return libroRepository.findById(isbn).
+                map(libroExistente ->
+                {
+                    libroExistente.setTitulo(libroActualizado.getTitulo());
+                    libroExistente.setNumPag(libroActualizado.getNumPag());
+                    libroExistente.setEditorial(libroActualizado.getEditorial());
+
+                    return libroRepository.save(libroExistente);
+                })
+                .orElseThrow(() -> new RuntimeException("El libro con ISBN: "+isbn+" no existe"));
     }
 
     @Override

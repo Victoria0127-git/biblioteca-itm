@@ -26,11 +26,15 @@ public class EjemplarServiceImpl implements IEjemplarService {
     }
 
     @Override
-    public Ejemplar guardar(Ejemplar ejemplar) {
+    public Ejemplar crear(Ejemplar ejemplar) {
         // Verificación de lógica de negocio:
         // Si es un ejemplar nuevo, podrías setear el estado por defecto a 'true' (disponible)
         if (ejemplar.getId() == null) {
             ejemplar.setEstado(true);
+        }
+
+        if (ejemplarRepository.existsById(ejemplar.getId())) {
+            throw new RuntimeException("Este ejemplar ya está registrado");
         }
 
         if (ejemplar.getLibro() == null) {
@@ -38,6 +42,19 @@ public class EjemplarServiceImpl implements IEjemplarService {
         }
 
         return ejemplarRepository.save(ejemplar);
+    }
+
+    @Override
+    public Ejemplar actualizar(String id, Ejemplar ejemplarActual) {
+        return ejemplarRepository.findById(ejemplarActual.getId()).
+                map(ejemplarExiste -> {
+                        ejemplarExiste.setUbicacion(ejemplarActual.getUbicacion());
+                        ejemplarExiste.setEstado(ejemplarActual.getEstado());
+                        ejemplarExiste.setLibro(ejemplarActual.getLibro());
+
+                        return ejemplarRepository.save(ejemplarExiste);
+                })
+                .orElseThrow(()-> new RuntimeException("No existe el ejemplar con ese id"));
     }
 
     @Override

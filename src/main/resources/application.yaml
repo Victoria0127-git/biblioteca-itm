@@ -12,6 +12,8 @@ spring:
         dialect: org.hibernate.dialect.SQLServerDialect
     hibernate:
       ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 springdoc:
   swagger-ui:

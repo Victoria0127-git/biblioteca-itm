@@ -1,0 +1,41 @@
+### GET request to example server
+GET http://localhost:8080/api/libros
+Accept: application/json
+
+### GET request with id
+GET http://localhost:8080/api/libros/9788432202391
+Accept: application/json
+
+### Crear un nuevo libro
+POST http://localhost:8080/api/libros
+Content-Type: application/json
+
+{
+  "isbn": "9780394172422",
+  "titulo": "El laberinto de la soledad",
+  "numPag": 444,
+  "editorial": {
+    "id": "E004"
+  }
+}
+
+### GET para miembros
+GET http://localhost:8080/api/miembro
+Accept: application/json
+
+###GET para miembros por id
+GET http://localhost:8080/api/miembro/M005
+Accept: application/json
+
+### POST creacion de miembro
+POST http://localhost:8080/api/miembro
+Content-Type: application/json
+
+{
+  "idMiembro": "M006",
+  "nombre": "Emilio",
+  "apellido": "Cardona",
+  "correo": "CardonaEmilio@correo.com",
+  "direccion": "CLL34AA#21-10",
+  "telefono": "3216745321"
+}
