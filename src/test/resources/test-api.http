@@ -39,3 +39,29 @@ Content-Type: application/json
   "direccion": "CLL34AA#21-10",
   "telefono": "3216745321"
 }
+
+### POST duplicado en miembro
+POST http://localhost:8080/api/miembro
+Content-Type: application/json
+
+{
+  "idMiembro": "M006",
+  "nombre": "Emilio",
+  "apellido": "Cardona",
+  "correo": "CardonaEmilio@correo.com",
+  "direccion": "CLL34AA#21-10",
+  "telefono": "3216745321"
+}
+
+###PUT actualizacaion
+PUT http://localhost:8080/api/miembro/M006
+Content-Type: application/json
+
+{
+  "nombre": "Emilio",
+  "apellido": "Jaramillo",
+  "correo": "CardonaEmilio@correo.com",
+  "direccion": "CLL34AA#21-10",
+  "telefono": "3216745321"
+}
+
