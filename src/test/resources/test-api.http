@@ -19,4 +19,23 @@ Content-Type: application/json
   }
 }
 
-###
+### GET para miembros
+GET http://localhost:8080/api/miembro
+Accept: application/json
+
+###GET para miembros por id
+GET http://localhost:8080/api/miembro/M005
+Accept: application/json
+
+### POST creacion de miembro
+POST http://localhost:8080/api/miembro
+Content-Type: application/json
+
+{
+  "idMiembro": "M006",
+  "nombre": "Emilio",
+  "apellido": "Cardona",
+  "correo": "CardonaEmilio@correo.com",
+  "direccion": "CLL34AA#21-10",
+  "telefono": "3216745321"
+}
