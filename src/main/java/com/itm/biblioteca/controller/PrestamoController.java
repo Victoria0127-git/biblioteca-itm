@@ -1,9 +1,8 @@
 package com.itm.biblioteca.controller;
 
-import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Prestamo;
 import com.itm.biblioteca.service.IPrestamoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +11,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/prestamos")
+@RequiredArgsConstructor
 public class PrestamoController {
-
-    @Autowired
-    private IPrestamoService prestamoService; // Inyectamos la interfaz del SERVICE
+    private final IPrestamoService prestamoService; // Inyectamos la interfaz del SERVICE
 
     @GetMapping
     public List<Prestamo> obtenerTodas() {

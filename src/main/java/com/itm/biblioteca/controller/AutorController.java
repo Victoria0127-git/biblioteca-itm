@@ -2,7 +2,7 @@ package com.itm.biblioteca.controller;
 
 import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.service.IAutorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +11,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/autores")
+@RequiredArgsConstructor
 public class AutorController {
-
-    @Autowired
-    private IAutorService autorService; // Inyectamos el SERVICE correctamente
+    private final IAutorService autorService; // Inyectamos el SERVICE correctamente
 
     @GetMapping
     public List<Autor> obtenerTodos() {

@@ -1,9 +1,8 @@
 package com.itm.biblioteca.controller;
 
-import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Bibliotecario;
 import com.itm.biblioteca.service.IBibliotecarioService; // Usamos la interfaz
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +11,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/bibliotecarios")
+@RequiredArgsConstructor
 public class BibliotecarioController {
-
-    @Autowired
-    private IBibliotecarioService bibliotecarioService; // Inyectamos el SERVICE, no el repo
+    private final IBibliotecarioService bibliotecarioService; // Inyectamos el SERVICE, no el repo
 
     @GetMapping
     public List<Bibliotecario> obtenerTodos() {
