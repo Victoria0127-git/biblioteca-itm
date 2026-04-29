@@ -4,11 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "Editorial")
 public class Editorial {
@@ -24,13 +25,4 @@ public class Editorial {
 
     @Column(name = "Telefono")
     private String telefono;
-
-    public Editorial() {}
-
-    public Editorial(String id, String nombre, String direccion, String telefono) {
-        this.id = id;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.telefono = telefono;
-    }
 }

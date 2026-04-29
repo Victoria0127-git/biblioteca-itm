@@ -1,11 +1,12 @@
 package com.itm.biblioteca.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "Ejemplar")
 public class Ejemplar {
@@ -22,13 +23,4 @@ public class Ejemplar {
     @ManyToOne
     @JoinColumn(name = "ISBN")
     private Libro libro;
-
-    public Ejemplar() {}
-
-    public Ejemplar(String id, String ubicacion, Boolean estado, Libro libro) {
-        this.id = id;
-        this.ubicacion = ubicacion;
-        this.estado = estado;
-        this.libro = libro;
-    }
 }

@@ -4,11 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Miembro")
 public class Miembro {
@@ -31,17 +32,4 @@ public class Miembro {
 
     @Column(name = "Telefono")
     private String telefono;
-
-    // 1. Constructor vacío (Obligatorio para JPA)
-    public Miembro() {}
-
-    // 2. Constructor con parámetros
-    public Miembro(String idMiembro, String nombre, String apellido, String correo, String direccion, String telefono) {
-        this.idMiembro = idMiembro;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
-        this.direccion = direccion;
-        this.telefono = telefono;
-    }
 }

@@ -1,13 +1,13 @@
 package com.itm.biblioteca.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Date;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "Escrito")
 public class Escrito {
@@ -28,14 +28,4 @@ public class Escrito {
     @ManyToOne
     @JoinColumn (name = "ID_Autor")
     private Autor autor;
-
-    public Escrito() {}
-
-    public Escrito(String id, String ciudad, Libro libro, Autor autor) {
-        this.id = id;
-        this.ciudad = ciudad;
-        this.libro = libro;
-        this.autor = autor;
-    }
-
 }

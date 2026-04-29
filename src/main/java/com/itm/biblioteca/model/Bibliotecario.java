@@ -4,11 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "Bibliotecario")
 public class Bibliotecario {
@@ -22,15 +23,4 @@ public class Bibliotecario {
 
     @Column (name ="Apellido")
     private String apellido;
-
-    //Constructor vacío
-    public Bibliotecario() {}
-
-    //Constructor con parámetros
-    public Bibliotecario(String idBibliotecario, String nombre, String apellido) {
-        this.idBibliotecario = idBibliotecario;
-        this.nombre = nombre;
-        this.apellido = apellido;
-    }
-
 }

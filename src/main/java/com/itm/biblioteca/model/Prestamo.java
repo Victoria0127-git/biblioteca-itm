@@ -1,12 +1,13 @@
 package com.itm.biblioteca.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import java.util.Date;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "Prestamo")
 public class Prestamo {
@@ -31,15 +32,4 @@ public class Prestamo {
     @ManyToOne
     @JoinColumn(name = "ID_Bibliotecario")
     private Bibliotecario bibliotecario;
-
-    public Prestamo() {}
-
-    public Prestamo(String idPrestamo,  Date fechaPrestamo, Date fechaDevolucion, Miembro miembro, Ejemplar ejemplar, Bibliotecario bibliotecario) {
-        this.idPrestamo = idPrestamo;
-        this.fechaPrestamo = fechaPrestamo;
-        this.fechaDevolucion = fechaDevolucion;
-        this.miembro = miembro;
-        this.ejemplar = ejemplar;
-        this.bibliotecario = bibliotecario;
-    }
 }

@@ -1,11 +1,12 @@
 package com.itm.biblioteca.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "Libro")
 public class Libro {
@@ -21,15 +22,4 @@ public class Libro {
 
     @ManyToOne //Llave foranea
     @JoinColumn(name = "ID_Editorial") Editorial editorial;
-
-
-    public Libro() {
-    }
-
-    public Libro(String isbn, String titulo, int numPag, Editorial editorial) {
-        this.isbn = isbn;
-        this.titulo = titulo;
-        this.numPag = numPag;
-        this.editorial = editorial;
-    }
 }
