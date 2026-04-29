@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 public class AutorServiceImplTest {
@@ -23,12 +24,52 @@ public class AutorServiceImplTest {
 
     @Test
     void listarTodos_RetornaTodosAutores() {
-        List<Autor> autores = autorRepository.findAll();
+        // GIVEN: Preparamos los datos que devolverá el mock
+        Autor autor1 = Autor.builder()
+                .idAutor("A001")
+                .nombre("Gabriel")
+                .apellido("Garcia")
+                .nacionalidad("Colombiana")
+                .build();
+        Autor autor2 = Autor.builder()
+                .idAutor("A002")
+                .nombre("Isabel")
+                .apellido("Parra")
+                .nacionalidad("Santa Catarina")
+                .build();
+        when(autorRepository.findAll()).thenReturn(List.of(autor1, autor2));
+
+        // WHEN
+        List<Autor> autores = autorService.listarTodos();
+
+        // THEN: Verificamos resultados
+        assertNotNull(autores);
+        assertEquals(2, autores.size());
+        verify(autorRepository, times(1)).findAll();
     }
 
     @Test
     void buscarPorId_RetornaAutorPorId() {
-        Autor autor = autorRepository.findById("M001").orElse(null);
+        // GIVEN: Preparamos el objeto que simulará estar en la DB
+        String idBuscado = "A003";
+        Autor autorSimulado = Autor.builder()
+                .idAutor(idBuscado)
+                .nombre("Mario")
+                .apellido("Gomez")
+                .nacionalidad("Chilena")
+                .build();
+
+        // Configuramos el mock para que devuelva el autor envuelto en un Optional
+        when(autorRepository.findById(idBuscado)).thenReturn(Optional.of(autorSimulado));
+
+        // WHEN
+        Autor resultado = autorService.buscarPorId(idBuscado).orElse(null); // Asumiendo que se llama así
+
+        // THEN: Verificaciones
+        assertNotNull(resultado);
+        assertEquals(idBuscado, resultado.getIdAutor());
+        assertEquals("Mario", resultado.getNombre());
+        verify(autorRepository, times(1)).findById(idBuscado);
     }
 
     @Test
