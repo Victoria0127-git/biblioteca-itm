@@ -3,17 +3,17 @@ package com.itm.biblioteca.service.impl;
 import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.repository.AutorRepository;
 import com.itm.biblioteca.service.IAutorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AutorServiceImpl implements IAutorService {
 
-    @Autowired
-    private AutorRepository autorRepository;
+    private final AutorRepository autorRepository;
 
     @Override
     public List<Autor> listarTodos() {

@@ -3,17 +3,16 @@ package com.itm.biblioteca.service.impl;
 import com.itm.biblioteca.model.Libro;
 import com.itm.biblioteca.repository.LibroRepository;
 import com.itm.biblioteca.service.ILibroService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class LibroServiceImpl implements ILibroService {
-
-    @Autowired
-    private LibroRepository libroRepository;
+    private final LibroRepository libroRepository;
 
     @Override
     public List<Libro> listarTodos() {
