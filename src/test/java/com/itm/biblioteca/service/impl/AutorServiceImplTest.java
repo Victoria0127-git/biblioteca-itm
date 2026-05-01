@@ -110,4 +110,38 @@ public class AutorServiceImplTest {
 
         verify(autorRepository, never()).save(any()); //Verficar que no se guardó
     }
+
+    @Test
+    void actualizarNombre_RetornaAutorActualizado(){
+        // 1. Datos de entrada (lo que envía el usuario)
+        String idBuscado = "A004";
+        Autor autorConNuevosDatos = Autor.builder()
+                .nombre("Stephen")
+                .build();
+
+        // 2. Mock de lo que está actualmente en la base de datos
+        Autor autorEnBaseDatos = Autor.builder()
+                .idAutor("A004")
+                .nombre("Steven") // Nombre viejo
+                .apellido("King")
+                .nacionalidad("Estadounidense")
+                .build();
+
+        // Configuración de los Mocks
+        when(autorRepository.findById(idBuscado)).thenReturn(Optional.of(autorEnBaseDatos));
+        // El save devuelve el mismo objeto que recibe (el argumento 0)
+        when(autorRepository.save(any(Autor.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // 3. Ejecución
+        Autor resultado = autorService.actualizar(idBuscado, autorConNuevosDatos);
+
+        // 4. Verificaciones (Assertions)
+        assertNotNull(resultado, "El autor actualizado no debería ser nulo");
+        assertEquals("Stephen", resultado.getNombre(), "El nombre debería haber cambiado a Stephen");
+        assertEquals("King", resultado.getApellido(), "El apellido debería mantenerse igual");
+
+        // Verificamos que se llamó a los métodos del repositorio correctamente
+        verify(autorRepository, times(1)).findById(idBuscado);
+        verify(autorRepository, times(1)).save(any(Autor.class));
+    }
 }
