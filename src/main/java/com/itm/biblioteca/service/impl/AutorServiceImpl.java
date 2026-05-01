@@ -64,10 +64,15 @@ public class AutorServiceImpl implements IAutorService {
     public Autor actualizar(String id, Autor autorActualizado){
         return autorRepository.findById(id).
                 map(autorExistente -> {
-                    autorExistente.setNombre(autorActualizado.getNombre());
-                    autorExistente.setApellido(autorActualizado.getApellido());
-                    autorExistente.setNacionalidad(autorActualizado.getNacionalidad());
-
+                    if ((autorActualizado.getNombre() != null)) {
+                        autorExistente.setNombre(autorActualizado.getNombre());
+                    }
+                    if (autorActualizado.getApellido() != null) {
+                        autorExistente.setApellido(autorActualizado.getApellido());
+                    }
+                    if (autorActualizado.getNacionalidad() != null) {
+                        autorExistente.setNacionalidad(autorActualizado.getNacionalidad());
+                    }
                     return autorRepository.save(autorExistente);
                 })
                 .orElseThrow(()-> new RuntimeException("El autor con el ID "+id+" no existe"));
