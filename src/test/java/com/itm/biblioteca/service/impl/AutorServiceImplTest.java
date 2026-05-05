@@ -64,7 +64,7 @@ public class AutorServiceImplTest {
         when(autorRepository.findById(idBuscado)).thenReturn(Optional.of(autorSimulado));
 
         // WHEN
-        Autor resultado = autorService.buscarPorId(idBuscado).orElse(null); // Asumiendo que se llama así
+        Autor resultado = autorService.buscarPorId(idBuscado).orElse(null);
 
         // THEN: Verificaciones
         assertNotNull(resultado);
