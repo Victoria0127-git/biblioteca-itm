@@ -2,11 +2,9 @@ package com.itm.biblioteca.controller;
 
 import com.itm.biblioteca.model.Autor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itm.biblioteca.service.impl.AutorServiceImpl;
+import com.itm.biblioteca.service.IAutorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -23,18 +21,9 @@ class AutorControllerTest {
     private MockMvc mockMvc; // Simula las peticiones http
 
     @MockitoBean
-    private AutorServiceImpl autorService; //Simula el servicio
+    private IAutorService autorService; //Simula el servicio
 
-    @TestConfiguration
-    static class TestConfig {
-        @Bean
-        ObjectMapper objectMapper() {
-            return new ObjectMapper();
-        }
-    }
-
-    @Autowired
-    private ObjectMapper objectMapper; //Convertir objetos JAVA a JSON
+    private final ObjectMapper objectMapper = new ObjectMapper(); //Convertir objetos JAVA a JSON
 
     @Test
     void crearAutor_DebeRetornarStatusCreated() throws Exception {
