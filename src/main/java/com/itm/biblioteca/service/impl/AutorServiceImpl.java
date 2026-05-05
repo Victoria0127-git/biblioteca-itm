@@ -5,6 +5,7 @@ import com.itm.biblioteca.repository.AutorRepository;
 import com.itm.biblioteca.service.IAutorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ public class AutorServiceImpl implements IAutorService {
     }
 
     @Override
+    @Transactional
     public Autor crear(Autor autor) {
         // 1. Validar que el objeto no sea nulo
         if (autor == null) {
@@ -61,6 +63,7 @@ public class AutorServiceImpl implements IAutorService {
     }
 
     @Override
+    @Transactional
     public Autor actualizar(String id, Autor autorActualizado){
         return autorRepository.findById(id).
                 map(autorExistente -> {
@@ -73,16 +76,17 @@ public class AutorServiceImpl implements IAutorService {
                     if (autorActualizado.getNacionalidad() != null) {
                         autorExistente.setNacionalidad(autorActualizado.getNacionalidad());
                     }
-                    return autorRepository.save(autorExistente);
+                    return autorExistente; //No es necesario el .save() porque EntityManager se encarga
                 })
                 .orElseThrow(()-> new RuntimeException("El autor con el ID "+id+" no existe"));
     }
 
     @Override
+    @Transactional
     public void eliminar(String id) {
         // Validar si existe antes de intentar borrar
         if (!autorRepository.existsById(id)) {
-            throw new RuntimeException("No se puede eliminar: La editorial con ID " + id + " no existe.");
+            throw new RuntimeException("No se puede eliminar: El autor con ID " + id + " no existe.");
         }
         autorRepository.deleteById(id);
     }
