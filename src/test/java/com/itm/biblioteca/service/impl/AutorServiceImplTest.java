@@ -1,6 +1,7 @@
 package com.itm.biblioteca.service.impl;
 
 import com.itm.biblioteca.model.Autor;
+import com.itm.biblioteca.service.IAutorService;
 import com.itm.biblioteca.repository.AutorRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +21,7 @@ public class AutorServiceImplTest {
     private AutorRepository autorRepository; //Creamos repo falso
 
     @InjectMocks
-    private AutorServiceImpl autorService; //Inyectamos el repo mock aquí
+    private IAutorService autorService; //Inyectamos el repo mock aquí
 
     @Test
     void listarTodos_RetornaTodosAutores() {
