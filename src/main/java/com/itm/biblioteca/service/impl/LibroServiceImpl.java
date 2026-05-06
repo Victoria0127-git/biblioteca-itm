@@ -22,7 +22,7 @@ public class LibroServiceImpl implements ILibroService {
 
     @Override
     public Optional<Libro> buscarPorId(String isbn) {
-        // Validamos que el ISBN no sea nulo antes de buscar
+
         if (isbn == null || isbn.isBlank()) {
             throw new IllegalArgumentException("El ISBN no puede estar vacío.");
         }
@@ -31,12 +31,12 @@ public class LibroServiceImpl implements ILibroService {
 
     @Override
     public Libro crear(Libro libro) {
-        // Verificaciones de negocio para Libro
+
         if (libro.getIsbn() == null || libro.getIsbn().length() < 10) {
             throw new RuntimeException("El ISBN debe tener un formato válido.");
         }
 
-        //Si ya existe, no lo crea (esa función es de actualizar)
+
         if (libroRepository.existsById(libro.getIsbn())){
             throw new RuntimeException("Ya existe un libro registrado con el ISBN: "+libro.getIsbn());
         }
@@ -45,7 +45,7 @@ public class LibroServiceImpl implements ILibroService {
             throw new RuntimeException("El título del libro es obligatorio.");
         }
 
-        // Si la editorial es obligatoria en tu modelo
+
         if (libro.getEditorial() == null) {
             throw new RuntimeException("Todo libro debe tener una editorial asignada.");
         }
