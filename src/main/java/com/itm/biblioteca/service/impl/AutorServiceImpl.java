@@ -76,7 +76,7 @@ public class AutorServiceImpl implements IAutorService {
                     if (autorActualizado.getNacionalidad() != null) {
                         autorExistente.setNacionalidad(autorActualizado.getNacionalidad());
                     }
-                    return autorExistente; //No es necesario el .save() porque EntityManager se encarga
+                    return autorRepository.save(autorExistente); //No es necesario el .save() porque EntityManager se encarga
                 })
                 .orElseThrow(()-> new RuntimeException("El autor con el ID "+id+" no existe"));
     }
