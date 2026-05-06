@@ -122,7 +122,7 @@ class AutorControllerTest {
                 .idAutor(idActualizar)
                 .nombre("Eutimio")
                 .apellido("Perez")
-                .nacionalidad("Chile")
+                .nacionalidad("Pepeganda")
                 .build();
 
         when(autorService.actualizar(eq(idActualizar), any(Autor.class))).thenReturn(autorActualizado);
