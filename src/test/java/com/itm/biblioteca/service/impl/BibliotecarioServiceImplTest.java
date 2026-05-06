@@ -144,9 +144,7 @@ public class BibliotecarioServiceImplTest {
 
         when(bibliotecarioRepository.existsById(idNotExist)).thenReturn(false);
 
-        assertThrows(RuntimeException.class, () -> {
-            bibliotecarioService.eliminar(idNotExist);
-        });
+        assertThrows(RuntimeException.class, () -> bibliotecarioService.eliminar(idNotExist));
 
         verify(bibliotecarioRepository, never()).deleteById(anyString());
         verify(bibliotecarioRepository).existsById(idNotExist);
