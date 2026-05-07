@@ -3,8 +3,3 @@ spring:
     active: dev
   application:
     name: biblioteca
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-  packages-to-scan: com.itm.biblioteca.controller
