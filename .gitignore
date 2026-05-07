@@ -36,4 +36,4 @@ desktop.ini
 *.log
 
 # Ignorar configuración específica de desarrollo
-src/main/resources/application-dev.yml
+src/main/resources/application-dev.yaml
