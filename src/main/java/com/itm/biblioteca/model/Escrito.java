@@ -28,11 +28,9 @@ public class Escrito {
 
     @ManyToOne
     @JoinColumn (name = "ISBN")
-    @Schema(example = "9780135398524")
     private Libro libro;
 
     @ManyToOne
     @JoinColumn (name = "ID_Autor")
-    @Schema(example = "A000")
     private Autor autor;
 }

@@ -27,6 +27,5 @@ public class Ejemplar {
 
     @ManyToOne
     @JoinColumn(name = "ISBN")
-    @Schema(example = "9780135398524", description = "Identificador único de cada ejemplar de 13 digitos")
     private Libro libro;
 }
