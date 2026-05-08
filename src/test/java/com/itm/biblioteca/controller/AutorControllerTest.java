@@ -71,7 +71,7 @@ class AutorControllerTest {
 
         //THEN
         mockMvc.perform(get("/api/autores")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].idAutor").value("A100"))
@@ -94,7 +94,7 @@ class AutorControllerTest {
 
         //THEN
         mockMvc.perform(get("/api/autores/" + idBuscado).
-                contentType(MediaType.APPLICATION_JSON_VALUE))
+                accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idAutor").value(idBuscado))
                 .andExpect(jsonPath("$.nombre").value("Test"));

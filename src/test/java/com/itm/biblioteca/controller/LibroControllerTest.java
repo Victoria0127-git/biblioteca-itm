@@ -57,7 +57,7 @@ public class LibroControllerTest {
         when(libroService.listarTodos()).thenReturn(libros);
 
         mockMvc.perform(get("/api/libros")
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(libros.size()))
                 .andExpect(jsonPath("$[0].isbn").value(libros.get(0).getIsbn()))
@@ -71,7 +71,7 @@ public class LibroControllerTest {
         when(libroService.buscarPorId(idNoExistente)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/libros/" + idNoExistente)
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNotFound());
 
         verify(libroService, times(1)).buscarPorId(idNoExistente);
@@ -121,8 +121,7 @@ public class LibroControllerTest {
 
         doNothing().when(libroService).eliminar(isbnEliminar);
 
-        mockMvc.perform(delete("/api/libros/" + isbnEliminar)
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(delete("/api/libros/" + isbnEliminar))
                 .andExpect(status().isNoContent());
 
         verify(libroService, times(1)).eliminar(isbnEliminar);

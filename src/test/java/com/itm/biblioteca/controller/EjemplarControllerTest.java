@@ -49,7 +49,7 @@ public class EjemplarControllerTest {
         when(ejemplarService.listarTodos() ).thenReturn(ejemplaresList);
 
         mockMvc.perform(get("/api/ejemplares")
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(ejemplaresList.size()))
                 .andExpect(jsonPath("$[0].id").value("EJ10"))

@@ -95,7 +95,7 @@ public class BibliotecarioControllerTest {
         when(bibliotecarioService.buscarPorId(idBuscado)).thenReturn(Optional.of(biblioBuscado));
 
         mockMvc.perform(get("/api/bibliotecarios/"+idBuscado)
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombre").value("Maria"));
     }
@@ -118,7 +118,7 @@ public class BibliotecarioControllerTest {
         when(bibliotecarioService.listarTodos()).thenReturn(bibliotecarioList);
 
         mockMvc.perform(get("/api/bibliotecarios")
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].nombre").value("Rosa"))
