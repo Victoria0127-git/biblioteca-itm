@@ -39,7 +39,7 @@ public class PrestamoServiceImpl implements IPrestamoService {
         }
 
         // 2. Verificación: Fechas lógicas
-        if (prestamo.getFechaDevolucion().before(prestamo.getFechaPrestamo())) {
+        if (prestamo.getFechaDevolucion().isBefore(prestamo.getFechaPrestamo())) {
             throw new RuntimeException("La fecha de devolución no puede ser anterior a la fecha de préstamo.");
         }
 

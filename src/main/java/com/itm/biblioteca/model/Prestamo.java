@@ -1,8 +1,9 @@
 package com.itm.biblioteca.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import lombok.*;
 
 @Data
@@ -19,12 +20,14 @@ public class Prestamo {
     private String idPrestamo;
 
     @Column(name = "Fecha_Prestamo")
-    @Schema(example = "13-04-2026", description = "Fecha en la que se realizó el prestamo")
-    private Date fechaPrestamo;
+    @Schema(example = "26-04-13", description = "Fecha en la que se realizó el prestamo")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fechaPrestamo;
 
     @Column(name = "Fecha_Devolucion")
-    @Schema(example = "07-05-2026", description = "Fecha en la que se devolvió el prestamo")
-    private Date fechaDevolucion;
+    @Schema(example = "2026-05-08", description = "Fecha en la que se devolvió el prestamo")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fechaDevolucion;
 
     @ManyToOne
     @JoinColumn(name = "ID_Miembro")
