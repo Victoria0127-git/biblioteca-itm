@@ -42,7 +42,7 @@ public class PrestamoControllerTest {
         when(prestamoService.listarTodos()).thenReturn(List.of());
 
         mockMvc.perform(get("/api/prestamos")
-                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(0));
@@ -63,7 +63,7 @@ public class PrestamoControllerTest {
         when(prestamoService.buscarPorId(idBuscar)).thenReturn(Optional.of(prestamo));
 
         mockMvc.perform(get("/api/prestamos/" + idBuscar)
-                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.idPrestamo").value(prestamo.getIdPrestamo()));
     }
@@ -82,8 +82,8 @@ public class PrestamoControllerTest {
         when(prestamoService.crear(prestamonuevo)).thenReturn(prestamonuevo);
 
         mockMvc.perform(post("/api/prestamos")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(objectMapper.writeValueAsString(prestamonuevo)))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(prestamonuevo)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idPrestamo").value(prestamonuevo.getIdPrestamo()));
     }
