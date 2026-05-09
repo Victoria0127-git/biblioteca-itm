@@ -1,7 +1,7 @@
 package com.itm.biblioteca.service.impl;
 
 import com.itm.biblioteca.model.Miembro;
-import com.itm.biblioteca.repository.MiembroRepository;
+import com.itm.biblioteca.repositorySQL.MiembroRepositorySQL;
 import com.itm.biblioteca.service.IMiembroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,11 +12,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MiembroServiceImpl implements IMiembroService {
-    private final MiembroRepository miembroRepository;
+    private final MiembroRepositorySQL miembroRepository;
 
     @Override
     public List<Miembro> listarTodos() {
-        return miembroRepository.findAll();
+        return miembroRepository.getMiembros();
     }
 
     @Override
@@ -35,20 +35,30 @@ public class MiembroServiceImpl implements IMiembroService {
             throw new RuntimeException("El nombre del miembro es obligatorio.");
         }
 
-        return miembroRepository.save(miembro);
+        return miembroRepository.insertarMiembro(miembro);
     }
 
     @Override
     public Miembro actualizar(String id, Miembro miembroActual){
-        return miembroRepository.findById(id).
+        return miembroRepository.buscarPorId(id).
                 map(miembroExistente -> {
-                    miembroExistente.setNombre(miembroActual.getNombre());
-                    miembroExistente.setApellido(miembroActual.getApellido());
-                    miembroExistente.setCorreo(miembroActual.getCorreo());
-                    miembroExistente.setDireccion( miembroActual.getDireccion());
-                    miembroExistente.setTelefono(miembroActual.getTelefono());
+                    if ((miembroExistente.getNombre() != null)) {
+                        miembroExistente.setNombre(miembroActual.getNombre());
+                    }
+                    if ((miembroExistente.getApellido() != null)) {
+                        miembroExistente.setApellido(miembroActual.getApellido());
+                    }
+                    if ((miembroExistente.getCorreo() != null)) {
+                        miembroExistente.setCorreo(miembroActual.getCorreo());
+                    }
+                    if ((miembroExistente.getDireccion() != null)) {
+                        miembroExistente.setDireccion( miembroActual.getDireccion());
+                    }
+                    if ((miembroExistente.getTelefono() != null)) {
+                        miembroExistente.setTelefono(miembroActual.getTelefono());
+                    }
 
-                    return miembroRepository.save(miembroExistente);
+                    return miembroRepository.actualizarMiembro(id, miembroExistente);
                 })
                 .orElseThrow(()-> new RuntimeException("El miembro con el ID "+id+" no existe"));
     }
@@ -59,7 +69,7 @@ public class MiembroServiceImpl implements IMiembroService {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("El ID proporcionado no es válido.");
         }
-        return miembroRepository.findById(id);
+        return miembroRepository.buscarPorId(id);
     }
 
     @Override
@@ -68,6 +78,6 @@ public class MiembroServiceImpl implements IMiembroService {
         if (!miembroRepository.existsById(id)) {
             throw new RuntimeException("No se puede eliminar: El miembro con ID " + id + " no existe.");
         }
-        miembroRepository.deleteById(id);
+        miembroRepository.eliminarMiembro(id);
     }
 }

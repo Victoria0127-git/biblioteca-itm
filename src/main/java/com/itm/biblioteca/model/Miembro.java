@@ -29,6 +29,10 @@ public class Miembro {
     @Schema(example = "Ochoa")
     private String apellido;
 
+    @Column(name = "Telefono")
+    @Schema(example = "3126541287")
+    private String telefono;
+
     @Column(name = "Correo")
     @Schema(example = "pauliOchoa@correo.com")
     private String correo;
@@ -36,8 +40,4 @@ public class Miembro {
     @Column(name = "Direccion")
     @Schema(example = "CLL32 A # 99CC - 214")
     private String direccion;
-
-    @Column(name = "Telefono")
-    @Schema(example = "3126541287")
-    private String telefono;
 }

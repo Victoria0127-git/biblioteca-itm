@@ -58,8 +58,13 @@ public class BibliotecarioServiceImpl implements IBibliotecarioService {
     public Bibliotecario actualizar(String id, Bibliotecario biblioActualizado){
         return bibliotecarioRepository.findById(id).
                 map(biblioExistente -> {
-                    biblioExistente.setNombre(biblioActualizado.getNombre());
-                    biblioExistente.setApellido(biblioActualizado.getApellido());
+                    if ((biblioActualizado.getNombre() != null)) {
+                        biblioExistente.setNombre(biblioActualizado.getNombre());
+                    }
+
+                    if ((biblioActualizado.getApellido() != null)) {
+                        biblioExistente.setApellido(biblioActualizado.getApellido());
+                    }
 
                     return bibliotecarioRepository.save(biblioExistente);
                 })

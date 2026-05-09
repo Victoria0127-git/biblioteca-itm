@@ -57,9 +57,15 @@ public class LibroServiceImpl implements ILibroService {
         return libroRepository.findById(isbn).
                 map(libroExistente ->
                 {
-                    libroExistente.setTitulo(libroActualizado.getTitulo());
-                    libroExistente.setNumPag(libroActualizado.getNumPag());
-                    libroExistente.setEditorial(libroActualizado.getEditorial());
+                    if ((libroActualizado.getIsbn() != null)) {
+                        libroExistente.setTitulo(libroActualizado.getTitulo());
+                    }
+                    if ((libroActualizado.getNumPag() != 0)) {
+                        libroExistente.setNumPag(libroActualizado.getNumPag());
+                    }
+                    if ((libroActualizado.getEditorial() != null)) {
+                        libroExistente.setEditorial(libroActualizado.getEditorial());
+                    }
 
                     return libroRepository.save(libroExistente);
                 })

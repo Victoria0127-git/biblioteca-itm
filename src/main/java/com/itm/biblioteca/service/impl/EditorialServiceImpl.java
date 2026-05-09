@@ -59,10 +59,15 @@ public class EditorialServiceImpl implements IEditorialService {
     public Editorial actualizar(String id, Editorial editorialActual){
         return editorialRepository.findById(id).
                 map(editorialExistente -> {
-                    editorialExistente.setNombre(editorialActual.getNombre());
-                    editorialExistente.setDireccion(editorialActual.getDireccion());
-                    editorialExistente.setTelefono(editorialActual.getTelefono());
-
+                    if ((editorialActual.getNombre() != null)) {
+                        editorialExistente.setNombre(editorialActual.getNombre());
+                    }
+                    if ((editorialActual.getTelefono() != null)) {
+                        editorialExistente.setTelefono(editorialActual.getTelefono());
+                    }
+                    if ((editorialActual.getDireccion() != null)) {
+                        editorialExistente.setDireccion(editorialActual.getDireccion());
+                    }
                     return editorialRepository.save(editorialExistente);
                 })
                 .orElseThrow(()-> new RuntimeException("La editorial con el ID "+id+" no existe"));

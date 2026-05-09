@@ -47,9 +47,15 @@ public class EjemplarServiceImpl implements IEjemplarService {
     public Ejemplar actualizar(String id, Ejemplar ejemplarActual) {
         return ejemplarRepository.findById(ejemplarActual.getId()).
                 map(ejemplarExiste -> {
+                    if ((ejemplarActual.getUbicacion() != null)) {
                         ejemplarExiste.setUbicacion(ejemplarActual.getUbicacion());
+                    }
+                    if ((ejemplarActual.getEstado() != null)) {
                         ejemplarExiste.setEstado(ejemplarActual.getEstado());
+                    }
+                    if ((ejemplarActual.getLibro() != null)) {
                         ejemplarExiste.setLibro(ejemplarActual.getLibro());
+                    }
 
                         return ejemplarRepository.save(ejemplarExiste);
                 })
