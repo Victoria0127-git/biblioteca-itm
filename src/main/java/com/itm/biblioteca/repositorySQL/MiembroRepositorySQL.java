@@ -106,7 +106,7 @@ public class MiembroRepositorySQL {
     }
 
     public boolean existsById(String id) {
-        // Usamos Try-with-resources para cerrar todo automáticamente
+        // Usamos Try-with-resources para cerrar automaticamente
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(MiembroQueries.EXISTS_BY_ID)) {
 
