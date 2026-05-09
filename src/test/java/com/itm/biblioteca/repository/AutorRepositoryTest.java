@@ -4,13 +4,11 @@ import com.itm.biblioteca.model.Autor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat; // Para el assertThat
 import java.util.Optional;
 
-@SpringBootTest
 @ActiveProfiles("test")
 @DataJpaTest
 class AutorRepositoryTest {
