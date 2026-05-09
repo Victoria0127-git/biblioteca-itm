@@ -50,12 +50,21 @@ public class PrestamoServiceImpl implements IPrestamoService {
     public Prestamo actualizar(String id, Prestamo prestamoActual){
         return prestamoRepository.findById(id).
                 map(prestamoExistente -> {
-                    prestamoExistente.setFechaPrestamo(prestamoActual.getFechaPrestamo());
-                    prestamoExistente.setFechaDevolucion(prestamoActual.getFechaDevolucion());
-                    prestamoExistente.setMiembro(prestamoActual.getMiembro());
-                    prestamoExistente.setBibliotecario(prestamoActual.getBibliotecario());
-                    prestamoExistente.setEjemplar(prestamoActual.getEjemplar());
-
+                    if ((prestamoActual.getFechaPrestamo() != null)) {
+                        prestamoExistente.setFechaPrestamo(prestamoActual.getFechaPrestamo());
+                    }
+                    if ((prestamoActual.getFechaDevolucion() != null)) {
+                        prestamoExistente.setFechaDevolucion(prestamoActual.getFechaDevolucion());
+                    }
+                    if ((prestamoActual.getMiembro() != null)) {
+                        prestamoExistente.setMiembro(prestamoActual.getMiembro());
+                    }
+                    if ((prestamoActual.getBibliotecario() != null)) {
+                        prestamoExistente.setBibliotecario(prestamoActual.getBibliotecario());
+                    }
+                    if ((prestamoActual.getEjemplar() != null)) {
+                        prestamoExistente.setEjemplar(prestamoActual.getEjemplar());
+                    }
                     return prestamoRepository.save(prestamoExistente);
                 })
                 .orElseThrow(()-> new RuntimeException("El prestamo con el ID "+id+" no existe"));
