@@ -3,17 +3,16 @@ package com.itm.biblioteca.service.impl;
 import com.itm.biblioteca.model.Ejemplar;
 import com.itm.biblioteca.repository.EjemplarRepository;
 import com.itm.biblioteca.service.IEjemplarService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class EjemplarServiceImpl implements IEjemplarService {
-
-    @Autowired
-    private EjemplarRepository ejemplarRepository;
+    private final EjemplarRepository ejemplarRepository;
 
     @Override
     public List<Ejemplar> listarTodos() {

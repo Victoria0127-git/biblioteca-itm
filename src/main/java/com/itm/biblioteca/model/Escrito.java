@@ -1,24 +1,29 @@
 package com.itm.biblioteca.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Date;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "Escrito")
+@Schema(description = "Información del libro")
 public class Escrito {
     @Id
     @Column(name = "ID_Escrito")
+    @Schema(example = "ES101", description = "Identificador único alfanúmerico")
     private String id;
 
     @Column(name = "FechaEscirto")
+    @Schema(example = "12-04-2026", description = "Fecha en la que se escribió el libro")
     private Date fechaEscrito;
 
     @Column(name = "Ciudad")
+    @Schema(example = "Chile", description = "Ciudad en la que se escribió el libro")
     private String ciudad;
 
     @ManyToOne
@@ -28,14 +33,4 @@ public class Escrito {
     @ManyToOne
     @JoinColumn (name = "ID_Autor")
     private Autor autor;
-
-    public Escrito() {}
-
-    public Escrito(String id, String ciudad, Libro libro, Autor autor) {
-        this.id = id;
-        this.ciudad = ciudad;
-        this.libro = libro;
-        this.autor = autor;
-    }
-
 }

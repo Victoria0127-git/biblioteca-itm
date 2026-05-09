@@ -3,17 +3,16 @@ package com.itm.biblioteca.service.impl;
 import com.itm.biblioteca.model.Editorial;
 import com.itm.biblioteca.repository.EditorialRepository;
 import com.itm.biblioteca.service.IEditorialService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class EditorialServiceImpl implements IEditorialService {
-
-    @Autowired
-    private EditorialRepository editorialRepository;
+    private final EditorialRepository editorialRepository;
 
     @Override
     public List<Editorial> listarTodos() {

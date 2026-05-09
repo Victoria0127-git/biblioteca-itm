@@ -1,24 +1,33 @@
 package com.itm.biblioteca.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import java.util.Date;
+import java.time.LocalDate;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table (name = "Prestamo")
+@Schema(description = "Representa un prestamo de un ejemplar dentro del sistema")
 public class Prestamo {
     @Id
     @Column(name = "ID_Prestamo")
+    @Schema(example = "P00123", description = "Identificador único alfanúmerico")
     private String idPrestamo;
 
     @Column(name = "Fecha_Prestamo")
-    private Date fechaPrestamo;
+    @Schema(example = "26-04-13", description = "Fecha en la que se realizó el prestamo")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fechaPrestamo;
 
     @Column(name = "Fecha_Devolucion")
-    private Date fechaDevolucion;
+    @Schema(example = "2026-05-08", description = "Fecha en la que se devolvió el prestamo")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fechaDevolucion;
 
     @ManyToOne
     @JoinColumn(name = "ID_Miembro")
@@ -31,15 +40,4 @@ public class Prestamo {
     @ManyToOne
     @JoinColumn(name = "ID_Bibliotecario")
     private Bibliotecario bibliotecario;
-
-    public Prestamo() {}
-
-    public Prestamo(String idPrestamo,  Date fechaPrestamo, Date fechaDevolucion, Miembro miembro, Ejemplar ejemplar, Bibliotecario bibliotecario) {
-        this.idPrestamo = idPrestamo;
-        this.fechaPrestamo = fechaPrestamo;
-        this.fechaDevolucion = fechaDevolucion;
-        this.miembro = miembro;
-        this.ejemplar = ejemplar;
-        this.bibliotecario = bibliotecario;
-    }
 }

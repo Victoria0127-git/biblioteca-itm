@@ -1,10 +1,9 @@
 package com.itm.biblioteca.service.impl;
 
-import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Prestamo;
 import com.itm.biblioteca.repository.PrestamoRepository;
 import com.itm.biblioteca.service.IPrestamoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,10 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PrestamoServiceImpl implements IPrestamoService {
-
-    @Autowired
-    private PrestamoRepository prestamoRepository;
+    private final PrestamoRepository prestamoRepository;
 
     @Override
     public List<Prestamo> listarTodos() {
@@ -41,7 +39,7 @@ public class PrestamoServiceImpl implements IPrestamoService {
         }
 
         // 2. Verificación: Fechas lógicas
-        if (prestamo.getFechaDevolucion().before(prestamo.getFechaPrestamo())) {
+        if (prestamo.getFechaDevolucion().isBefore(prestamo.getFechaPrestamo())) {
             throw new RuntimeException("La fecha de devolución no puede ser anterior a la fecha de préstamo.");
         }
 

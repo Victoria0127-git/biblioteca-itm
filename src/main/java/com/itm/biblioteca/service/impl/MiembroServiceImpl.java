@@ -1,18 +1,18 @@
 package com.itm.biblioteca.service.impl;
+
 import com.itm.biblioteca.model.Miembro;
 import com.itm.biblioteca.repository.MiembroRepository;
 import com.itm.biblioteca.service.IMiembroService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MiembroServiceImpl implements IMiembroService {
-
-    @Autowired
-    private MiembroRepository miembroRepository;
+    private final MiembroRepository miembroRepository;
 
     @Override
     public List<Miembro> listarTodos() {

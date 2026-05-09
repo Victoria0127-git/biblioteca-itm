@@ -1,5 +1,8 @@
 spring:
+  profiles:
+    active: dev
   application:
+<<<<<<< HEAD
     name: biblioteca
 
   datasource:
@@ -23,3 +26,6 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
   packages-to-scan: com.itm.biblioteca.controller
+=======
+    name: biblioteca
+>>>>>>> origin/main

@@ -1,20 +1,18 @@
 package com.itm.biblioteca.service.impl;
 
-import com.itm.biblioteca.model.Autor;
 import com.itm.biblioteca.model.Bibliotecario;
 import com.itm.biblioteca.repository.BibliotecarioRepository;
 import com.itm.biblioteca.service.IBibliotecarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BibliotecarioServiceImpl implements IBibliotecarioService {
-
-    @Autowired
-    private BibliotecarioRepository bibliotecarioRepository;
+    private final BibliotecarioRepository bibliotecarioRepository;
 
     @Override
     public List<Bibliotecario> listarTodos() {

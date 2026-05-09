@@ -34,3 +34,6 @@ nbdist/
 Thumbs.db
 desktop.ini
 *.log
+
+# Ignorar configuración específica de desarrollo
+src/main/resources/application-dev.yaml
