@@ -4,23 +4,3 @@ spring:
   application:
     name: biblioteca
 
-  datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=BibliotecaITM;encrypt=true;trustServerCertificate=true
-    username: sa
-    password: password123
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.SQLServerDialect
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-  packages-to-scan: com.itm.biblioteca.controller
