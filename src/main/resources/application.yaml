@@ -2,11 +2,9 @@ spring:
   profiles:
     active: dev
   application:
-<<<<<<< HEAD
     name: biblioteca
 
   datasource:
-
     url: jdbc:sqlserver://localhost:1433;databaseName=BibliotecaITM;encrypt=true;trustServerCertificate=true
     username: sa
     password: password123
@@ -26,6 +24,3 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
   packages-to-scan: com.itm.biblioteca.controller
-=======
-    name: biblioteca
->>>>>>> origin/main
