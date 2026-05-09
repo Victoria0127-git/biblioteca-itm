@@ -1,17 +1,19 @@
 package com.itm.biblioteca.repository;
 
 import com.itm.biblioteca.model.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 class EscritoRepositoryTest {
 
     @Autowired
@@ -27,28 +29,31 @@ class EscritoRepositoryTest {
     private EditorialRepository editorialRepository;
 
     @Test
+    @DisplayName("Debe guardar un Escrito con sus relaciones de Libro, Autor y Editorial")
     void testGuardarEscrito() {
+        // GIVEN: Preparar el árbol de dependencias
 
+        // 1. Editorial
         Editorial ed = new Editorial();
         ed.setId("ED-99");
         ed.setNombre("Editorial Mundo");
         editorialRepository.save(ed);
 
-
+        // 2. Libro (depende de Editorial)
         Libro libro = new Libro();
         libro.setIsbn("ISBN-999");
         libro.setTitulo("Cien años de soledad");
         libro.setEditorial(ed);
         libroRepository.save(libro);
 
-
+        // 3. Autor
         Autor autor = new Autor();
-        autor.setIdAutor("AUT-01"); // Revisa si tu campo se llama idAutor o id
+        autor.setIdAutor("AUT-01");
         autor.setNombre("Gabriel");
         autor.setApellido("Garcia Marquez");
         autorRepository.save(autor);
 
-
+        // 4. Escrito (depende de Libro y Autor)
         Escrito escrito = new Escrito();
         escrito.setId("ES101");
         escrito.setFechaEscrito(new Date());
@@ -56,14 +61,18 @@ class EscritoRepositoryTest {
         escrito.setLibro(libro);
         escrito.setAutor(autor);
 
-
+        // WHEN: Guardar la entidad principal
         Escrito guardado = escritoRepository.save(escrito);
 
+        // THEN: Verificaciones profundas con AssertJ
+        Optional<Escrito> encontrado = escritoRepository.findById(guardado.getId());
 
-        assertNotNull(guardado);
-        assertEquals("ES101", guardado.getId());
-        assertEquals("Aracataca", guardado.getCiudad());
-        assertEquals("Cien años de soledad", guardado.getLibro().getTitulo());
-        assertEquals("Gabriel", guardado.getAutor().getNombre());
+        assertThat(encontrado).isPresent();
+        assertThat(encontrado.get().getCiudad()).isEqualTo("Aracataca");
+
+        // Verificación de relaciones
+        assertThat(encontrado.get().getLibro().getTitulo()).isEqualTo("Cien años de soledad");
+        assertThat(encontrado.get().getLibro().getEditorial().getNombre()).isEqualTo("Editorial Mundo");
+        assertThat(encontrado.get().getAutor().getNombre()).isEqualTo("Gabriel");
     }
 }

@@ -3,17 +3,17 @@ package com.itm.biblioteca.service.impl;
 import com.itm.biblioteca.model.Ejemplar;
 import com.itm.biblioteca.model.Libro;
 import com.itm.biblioteca.repository.EjemplarRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -27,89 +27,119 @@ class EjemplarServiceImplTest {
     @InjectMocks
     private EjemplarServiceImpl ejemplarService;
 
-    private Ejemplar ejemplar;
-    private Libro libro;
-
-    @BeforeEach
-    void setUp() {
-
-        libro = new Libro();
-        libro.setIsbn("1234567890");
-        libro.setTitulo("Cien años de soledad");
-
-        ejemplar = new Ejemplar();
-        ejemplar.setId("EJ-001");
-        ejemplar.setUbicacion("Estante A-1");
-        ejemplar.setEstado(true);
-        ejemplar.setLibro(libro);
-    }
-
     @Test
-    void listarTodos() {
-        when(ejemplarRepository.findAll()).thenReturn(Arrays.asList(ejemplar));
+    @DisplayName("Debe listar todos los ejemplares")
+    void listarTodos_RetornaListaDeEjemplares() {
+        // GIVEN
+        Ejemplar ej = new Ejemplar();
+        ej.setId("EJ-001");
+        when(ejemplarRepository.findAll()).thenReturn(List.of(ej));
 
+        // WHEN
         List<Ejemplar> resultado = ejemplarService.listarTodos();
 
-        assertNotNull(resultado);
-        assertEquals(1, resultado.size());
-        verify(ejemplarRepository).findAll();
+        // THEN
+        assertThat(resultado).hasSize(1);
+        verify(ejemplarRepository, times(1)).findAll();
     }
 
     @Test
-    void buscarPorId() {
-        when(ejemplarRepository.findById("EJ-001")).thenReturn(Optional.of(ejemplar));
+    @DisplayName("Debe buscar un ejemplar por ID")
+    void buscarPorId_RetornaEjemplarSiExiste() {
+        // GIVEN
+        String id = "EJ-001";
+        Ejemplar ejemplar = new Ejemplar();
+        ejemplar.setId(id);
+        ejemplar.setUbicacion("Estante A-1");
+        when(ejemplarRepository.findById(id)).thenReturn(Optional.of(ejemplar));
 
-        Optional<Ejemplar> encontrado = ejemplarService.buscarPorId("EJ-001");
+        // WHEN
+        Optional<Ejemplar> encontrado = ejemplarService.buscarPorId(id);
 
-        assertTrue(encontrado.isPresent());
-        assertEquals("Estante A-1", encontrado.get().getUbicacion());
+        // THEN
+        assertThat(encontrado).isPresent();
+        assertThat(encontrado.get().getUbicacion()).isEqualTo("Estante A-1");
     }
 
     @Test
-    void crear() {
+    @DisplayName("Debe crear un ejemplar asociado a un libro")
+    void crear_RetornaEjemplarGuardado() {
+        // GIVEN
+        Libro libro = new Libro();
+        libro.setIsbn("1234567890");
+
+        Ejemplar ej = new Ejemplar();
+        ej.setId("EJ-001");
+        ej.setLibro(libro);
+        ej.setEstado(true);
 
         when(ejemplarRepository.existsById("EJ-001")).thenReturn(false);
-        when(ejemplarRepository.save(any(Ejemplar.class))).thenReturn(ejemplar);
+        when(ejemplarRepository.save(any(Ejemplar.class))).thenReturn(ej);
 
-        Ejemplar creado = ejemplarService.crear(ejemplar);
+        // WHEN
+        Ejemplar creado = ejemplarService.crear(ej);
 
-        assertNotNull(creado);
-        assertEquals("EJ-001", creado.getId());
+        // THEN
+        assertThat(creado).isNotNull();
+        assertThat(creado.getId()).isEqualTo("EJ-001");
+        assertThat(creado.getLibro()).isNotNull();
+        verify(ejemplarRepository, times(1)).save(any(Ejemplar.class));
+    }
 
-        assertNotNull(creado.getLibro());
+    @Test
+    @DisplayName("Debe lanzar excepción si se intenta crear un ejemplar sin libro")
+    void crear_FallaSiNoTieneLibro() {
+        // GIVEN
+        Ejemplar ejSinLibro = new Ejemplar();
+        ejSinLibro.setId("EJ-002");
+        ejSinLibro.setLibro(null); // Caso de error
+
+        // WHEN & THEN
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> ejemplarService.crear(ejSinLibro));
+
+        assertThat(ex.getMessage()).isEqualTo("Un ejemplar debe estar asociado a un Libro (ISBN).");
+        verify(ejemplarRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Debe actualizar la ubicación y estado de un ejemplar")
+    void actualizar_RetornaEjemplarModificado() {
+        // GIVEN
+        String id = "EJ-001";
+        Ejemplar datosNuevos = new Ejemplar();
+        datosNuevos.setId(id);
+        datosNuevos.setUbicacion("Bodega Central");
+        datosNuevos.setEstado(false);
+
+        Ejemplar ejExistente = new Ejemplar();
+        ejExistente.setId(id);
+        ejExistente.setUbicacion("Estante A-1");
+        ejExistente.setEstado(true);
+
+        when(ejemplarRepository.findById(id)).thenReturn(Optional.of(ejExistente));
+        when(ejemplarRepository.save(any(Ejemplar.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        // WHEN
+        Ejemplar resultado = ejemplarService.actualizar(id, datosNuevos);
+
+        // THEN
+        assertThat(resultado.getUbicacion()).isEqualTo("Bodega Central");
+        assertThat(resultado.getEstado()).isFalse();
         verify(ejemplarRepository).save(any(Ejemplar.class));
     }
 
     @Test
-    void crearFallaSinLibro() {
+    @DisplayName("Debe eliminar ejemplar si existe en la base de datos")
+    void eliminar_LlamaAlRepositorioSiExiste() {
+        // GIVEN
+        String id = "EJ-001";
+        when(ejemplarRepository.existsById(id)).thenReturn(true);
+        doNothing().when(ejemplarRepository).deleteById(id);
 
-        ejemplar.setLibro(null);
+        // WHEN
+        ejemplarService.eliminar(id);
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            ejemplarService.crear(ejemplar);
-        });
-
-        assertEquals("Un ejemplar debe estar asociado a un Libro (ISBN).", exception.getMessage());
-    }
-
-    @Test
-    void actualizar() {
-        when(ejemplarRepository.findById("EJ-001")).thenReturn(Optional.of(ejemplar));
-        when(ejemplarRepository.save(any(Ejemplar.class))).thenReturn(ejemplar);
-
-        Ejemplar resultado = ejemplarService.actualizar("EJ-001", ejemplar);
-
-        assertNotNull(resultado);
-        verify(ejemplarRepository).save(any(Ejemplar.class));
-    }
-
-    @Test
-    void eliminar() {
-        when(ejemplarRepository.existsById("EJ-001")).thenReturn(true);
-        doNothing().when(ejemplarRepository).deleteById("EJ-001");
-
-        ejemplarService.eliminar("EJ-001");
-
-        verify(ejemplarRepository).deleteById("EJ-001");
+        // THEN
+        verify(ejemplarRepository, times(1)).deleteById(id);
     }
 }

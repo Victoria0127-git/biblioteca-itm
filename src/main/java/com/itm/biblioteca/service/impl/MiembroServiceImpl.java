@@ -58,7 +58,7 @@ public class MiembroServiceImpl implements IMiembroService {
                         miembroExistente.setTelefono(miembroActual.getTelefono());
                     }
 
-                    return miembroRepository.actualizarMiembro(id, miembroExistente);
+                    return miembroExistente;
                 })
                 .orElseThrow(()-> new RuntimeException("El miembro con el ID "+id+" no existe"));
     }
