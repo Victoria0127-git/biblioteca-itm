@@ -24,7 +24,7 @@ public class Libro {
 
     @Column(name = "NumPag")
     @Schema(example = "462", description = "Número de paginas del libro")
-    private int numPag;
+    private Integer numPag;
 
     @ManyToOne //Llave foranea
     @JoinColumn(name = "ID_Editorial") Editorial editorial;

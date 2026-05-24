@@ -19,6 +19,19 @@ Content-Type: application/json
   }
 }
 
+### POST para ejemplar
+POST http://localhost:8080/api/ejemplares
+Content-Type: application/json
+
+{
+  "id": "EJ009",
+  "ubicacion" : "Estante B3",
+  "estado": true,
+  "libro": {
+    "isbn": "9780394172422"
+  }
+}
+
 ### GET para miembros
 GET http://localhost:8080/api/miembro
 Accept: application/json
