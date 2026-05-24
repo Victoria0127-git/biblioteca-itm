@@ -34,6 +34,7 @@ public class EscritoServiceImpl implements IEscritoService {
         return escritoRepository.save(escrito);
     }
 
+    @Override
     public void eliminar(String id) {
         escritoRepository.deleteById(id);
     }

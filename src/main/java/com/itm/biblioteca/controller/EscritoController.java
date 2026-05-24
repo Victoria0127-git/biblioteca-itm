@@ -7,11 +7,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,5 +41,20 @@ public class EscritoController {
         return escritoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    @Operation(summary = "Crear escrito", description = "Registra un nuevo autor en el sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Autor creado"),
+            @ApiResponse(responseCode = "400", description = "Ha ocurrido un error")
+    })
+    public ResponseEntity<?> crearEscrito(@RequestBody Escrito escrito) {
+        try {
+            Escrito guardado = escritoService.crear(escrito);
+            return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
