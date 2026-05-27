@@ -42,9 +42,8 @@ public class AutorServiceImpl implements IAutorService {
             throw new RuntimeException("Ya existe un autor con el ID: "+autor.getIdAutor());
         }
 
-        // 2. Validar campos obligatorios
         if (autor.getIdAutor() == null || autor.getIdAutor().isBlank()) {
-            throw new RuntimeException("El ID del autor es obligatorio.");
+            throw new RuntimeException("El ID es obligatorio.");
         }
 
         if (autor.getNombre() == null || autor.getNombre().isBlank()) {
