@@ -34,7 +34,7 @@ public class EscritoServiceImpl implements IEscritoService {
         //Generamos un ID personalizado Automático
         Integer maxNumero = escritoRepository.findMaxIdNumeric();
         int siguienteNumero = (maxNumero == null) ? 1 : maxNumero + 1;
-        String nuevoIdEscrito = String.format("E%03d", siguienteNumero);
+        String nuevoIdEscrito = String.format("ES%03d", siguienteNumero);
 
         //Mapeamos un autor cascaron
         Autor autorcascaron = Autor.builder().idAutor(idAutor).build();
