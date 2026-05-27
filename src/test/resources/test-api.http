@@ -100,3 +100,7 @@ Content-Type: application/json
 }
 
 
+###Get para ver los estados de ejemplares
+GET http://localhost:8080/api/ejemplares
+Accept: application/json
+
