@@ -51,7 +51,7 @@ public class EscritoController {
     })
     public ResponseEntity<?> crearEscrito(@RequestBody Escrito escrito) {
         // Validación de seguridad para asegurar que los datos anidados existan
-        if (escrito.getLibro() == null || escrito.getAutor() == null || escrito.getAutor().getIdAutor() == null) {
+        if (escrito.getLibro() == null || escrito.getAutor() == null ) {
             return ResponseEntity.badRequest().body("El escrito debe contener un libro y un autor con ID válido.");
         }
 
