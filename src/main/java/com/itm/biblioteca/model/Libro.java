@@ -26,6 +26,9 @@ public class Libro {
     @Schema(example = "462", description = "Número de paginas del libro")
     private Integer numPag;
 
+    @Column(name = "Estado")
+    private Boolean estado = true;
+
     @ManyToOne //Llave foranea
     @JoinColumn(name = "ID_Editorial") Editorial editorial;
 }

@@ -16,7 +16,7 @@ public class LibroServiceImpl implements ILibroService {
 
     @Override
     public List<Libro> listarTodos() {
-        return libroRepository.findAll();
+        return libroRepository.findByEstadoTrue();
     }
 
     @Override
@@ -74,9 +74,10 @@ public class LibroServiceImpl implements ILibroService {
 
     @Override
     public void eliminar(String isbn) {
-        if (!libroRepository.existsById(isbn)) {
-            throw new RuntimeException("No se puede eliminar: El libro con ISBN " + isbn + " no existe.");
-        }
-        libroRepository.deleteById(isbn);
+        Libro libro = libroRepository.findById(isbn)
+                .orElseThrow(() -> new RuntimeException("No se encontró el libro"));
+
+        libro.setEstado(false); // Cambia el BIT a 0 en SQL Server
+        libroRepository.save(libro);
     }
 }
