@@ -1,7 +1,7 @@
 package com.itm.biblioteca.service.impl;
 
 import com.itm.biblioteca.model.Miembro;
-import com.itm.biblioteca.repositorySQL.MiembroRepositorySQL;
+import com.itm.biblioteca.repository.MiembroRepository;
 import com.itm.biblioteca.service.IMiembroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,11 +12,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MiembroServiceImpl implements IMiembroService {
-    private final MiembroRepositorySQL miembroRepository;
+    private final MiembroRepository miembroRepository;
 
     @Override
     public List<Miembro> listarTodos() {
-        return miembroRepository.getMiembros();
+        return miembroRepository.findAll();
     }
 
     @Override
@@ -35,12 +35,27 @@ public class MiembroServiceImpl implements IMiembroService {
             throw new RuntimeException("El nombre del miembro es obligatorio.");
         }
 
-        return miembroRepository.insertarMiembro(miembro);
+        //Creamos el id personalizado
+        Integer maxNum = miembroRepository.findMaxIdNumeric();
+        int siguienteNum  = (maxNum == null) ? 1 : maxNum + 1;
+        String nuevoIdMiembro = String.format("M%03d", siguienteNum);
+
+        //Creamos la base de miembro
+        Miembro miembroNuevo = Miembro.builder()
+                .idMiembro(nuevoIdMiembro)
+                .nombre(miembro.getNombre())
+                .apellido(miembro.getApellido())
+                .correo(miembro.getCorreo())
+                .telefono(miembro.getTelefono())
+                .direccion(miembro.getDireccion())
+                .build();
+
+        return miembroRepository.save(miembroNuevo);
     }
 
     @Override
     public Miembro actualizar(String id, Miembro miembroActual){
-        return miembroRepository.buscarPorId(id).
+        return miembroRepository.findById(id).
                 map(miembroExistente -> {
                     if ((miembroExistente.getNombre() != null)) {
                         miembroExistente.setNombre(miembroActual.getNombre());
@@ -69,7 +84,7 @@ public class MiembroServiceImpl implements IMiembroService {
         if (id == null || id.isBlank()) {
             throw new IllegalArgumentException("El ID proporcionado no es válido.");
         }
-        return miembroRepository.buscarPorId(id);
+        return miembroRepository.findById(id);
     }
 
     @Override
@@ -78,6 +93,6 @@ public class MiembroServiceImpl implements IMiembroService {
         if (!miembroRepository.existsById(id)) {
             throw new RuntimeException("No se puede eliminar: El miembro con ID " + id + " no existe.");
         }
-        miembroRepository.eliminarMiembro(id);
+        miembroRepository.deleteById(id);
     }
 }

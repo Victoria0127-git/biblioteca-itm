@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +44,21 @@ public class PrestamoServiceImpl implements IPrestamoService {
             throw new RuntimeException("La fecha de devolución no puede ser anterior a la fecha de préstamo.");
         }
 
-        return prestamoRepository.save(prestamo);
+        //Creamos el id personalizado automáticamente
+        Integer maxNum = prestamoRepository.findMaxIdNumeric();
+        int siguienteNum = (maxNum == null) ? 1 : maxNum + 1;
+        String nuevoIdPrestamo = String.format("P%03d", siguienteNum);
+
+        //Construimos la base del prestamo con valores predeterminados
+        Prestamo prestamoNuevo = Prestamo.builder()
+                .idPrestamo(nuevoIdPrestamo)
+                .fechaPrestamo(LocalDate.now())
+                .ejemplar(prestamo.getEjemplar())
+                .miembro(prestamo.getMiembro())
+                .bibliotecario(prestamo.getBibliotecario())
+                .build();
+
+        return prestamoRepository.save(prestamoNuevo);
     }
 
     @Override
