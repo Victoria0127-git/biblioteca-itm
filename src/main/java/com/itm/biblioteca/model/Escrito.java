@@ -16,7 +16,7 @@ import lombok.*;
 public class Escrito {
     @Id
     @Column(name = "ID_Escrito")
-    @Schema(example = "ES101", description = "Identificador único alfanúmerico")
+    @Schema(example = "E101", description = "Identificador único alfanúmerico")
     private String id;
 
     @Column(name = "FechaEscrito")
