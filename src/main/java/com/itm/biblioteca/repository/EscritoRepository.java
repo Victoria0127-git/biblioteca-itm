@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EscritoRepository extends JpaRepository<Escrito, String> {
-    @Query(value = "SELECT MAX(REPLACE(ID_Escrito, 'E', '')) FROM Escrito", nativeQuery = true)
+    @Query(value = "SELECT MAX(REPLACE(ID_Escrito, 'ES', '')) FROM Escrito", nativeQuery = true)
     Integer findMaxIdNumeric();
 }
