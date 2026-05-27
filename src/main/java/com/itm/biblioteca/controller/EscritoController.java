@@ -50,8 +50,13 @@ public class EscritoController {
             @ApiResponse(responseCode = "400", description = "Ha ocurrido un error")
     })
     public ResponseEntity<?> crearEscrito(@RequestBody Escrito escrito) {
+        // Validación de seguridad para asegurar que los datos anidados existan
+        if (escrito.getLibro() == null || escrito.getAutor() == null || escrito.getAutor().getIdAutor() == null) {
+            return ResponseEntity.badRequest().body("El escrito debe contener un libro y un autor con ID válido.");
+        }
+
         try {
-            Escrito guardado = escritoService.crear(escrito);
+            Escrito guardado = escritoService.crearYGuardarEscrito(escrito.getLibro(), escrito.getAutor().getIdAutor());
             return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
