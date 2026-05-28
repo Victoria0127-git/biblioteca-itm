@@ -5,6 +5,7 @@ import com.itm.biblioteca.repository.MiembroRepository;
 import com.itm.biblioteca.service.IMiembroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,14 +21,11 @@ public class MiembroServiceImpl implements IMiembroService {
     }
 
     @Override
+    @Transactional
     public Miembro crear(Miembro miembro) {
         // 1. Verificación de nulidad
         if (miembro == null) {
             throw new IllegalArgumentException("El miembro no puede ser nulo.");
-        }
-
-        if (miembroRepository.existsById(miembro.getIdMiembro())){
-            throw new IllegalArgumentException("El miembro existe en el sistema.");
         }
 
         // 2. Verificación de campos obligatorios (Ejemplo con el nombre)
@@ -54,28 +52,32 @@ public class MiembroServiceImpl implements IMiembroService {
     }
 
     @Override
+    @Transactional
     public Miembro actualizar(String id, Miembro miembroActual){
-        return miembroRepository.findById(id).
-                map(miembroExistente -> {
-                    if ((miembroExistente.getNombre() != null)) {
+        return miembroRepository.findById(id)
+                .map(miembroExistente -> {
+                    // Validamos que el dato NUEVO no sea nulo ni vacío antes de sobreescribir
+                    if (miembroActual.getNombre() != null && !miembroActual.getNombre().isBlank()) {
                         miembroExistente.setNombre(miembroActual.getNombre());
                     }
-                    if ((miembroExistente.getApellido() != null)) {
+                    if (miembroActual.getApellido() != null && !miembroActual.getApellido().isBlank()) {
                         miembroExistente.setApellido(miembroActual.getApellido());
                     }
-                    if ((miembroExistente.getCorreo() != null)) {
+                    if (miembroActual.getCorreo() != null && !miembroActual.getCorreo().isBlank()) {
                         miembroExistente.setCorreo(miembroActual.getCorreo());
                     }
-                    if ((miembroExistente.getDireccion() != null)) {
-                        miembroExistente.setDireccion( miembroActual.getDireccion());
+
+                    // Quitamos la restricción sobre el existente para que deje registrar la dirección por primera vez
+                    if (miembroActual.getDireccion() != null) {
+                        miembroExistente.setDireccion(miembroActual.getDireccion());
                     }
-                    if ((miembroExistente.getTelefono() != null)) {
+                    if (miembroActual.getTelefono() != null) {
                         miembroExistente.setTelefono(miembroActual.getTelefono());
                     }
 
-                    return miembroExistente;
+                    return miembroRepository.save(miembroExistente); // Aseguramos la persistencia
                 })
-                .orElseThrow(()-> new RuntimeException("El miembro con el ID "+id+" no existe"));
+                .orElseThrow(() -> new RuntimeException("El miembro con el ID " + id + " no existe"));
     }
 
     @Override
@@ -88,6 +90,7 @@ public class MiembroServiceImpl implements IMiembroService {
     }
 
     @Override
+    @Transactional
     public void eliminar(String id) {
         // Verificamos si existe antes de intentar borrar
         if (!miembroRepository.existsById(id)) {

@@ -1,6 +1,7 @@
 package com.itm.biblioteca.service.impl;
 
 import com.itm.biblioteca.model.Ejemplar;
+import com.itm.biblioteca.model.Libro;
 import com.itm.biblioteca.repository.EjemplarRepository;
 import com.itm.biblioteca.service.IEjemplarService;
 import lombok.RequiredArgsConstructor;
@@ -27,20 +28,27 @@ public class EjemplarServiceImpl implements IEjemplarService {
     @Override
     public Ejemplar crear(Ejemplar ejemplar) {
         // Verificación de lógica de negocio:
-        // Si es un ejemplar nuevo, podrías setear el estado por defecto a 'true' (disponible)
-        if (ejemplar.getId() == null) {
-            ejemplar.setEstado(true);
-        }
-
-        if (ejemplarRepository.existsById(ejemplar.getId())) {
-            throw new RuntimeException("Este ejemplar ya está registrado");
-        }
-
         if (ejemplar.getLibro() == null) {
             throw new RuntimeException("Un ejemplar debe estar asociado a un Libro (ISBN).");
         }
 
-        return ejemplarRepository.save(ejemplar);
+        //Creamos el ID personalizado
+        Integer numMax = ejemplarRepository.findMaxIdNumeric();
+        int nextNum = (numMax==null)?1:numMax+1;
+        String idPersonalizado = String.format("J"+nextNum);
+
+        //Creamos libroCascaron
+        Libro libroCascaron = Libro.builder().isbn(ejemplar.getLibro().getIsbn()).build();
+
+        //Creamos el ejemplar
+        Ejemplar nuevoEjemplar = Ejemplar.builder()
+                .id(idPersonalizado)
+                .libro(libroCascaron)
+                .estado(true) //Al crearlo, siempre va a estar por defecto disponible
+                .ubicacion(ejemplar.getUbicacion())
+                .build();
+
+        return ejemplarRepository.save(nuevoEjemplar);
     }
 
     @Override
