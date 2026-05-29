@@ -40,4 +40,7 @@ public class Miembro {
     @Column(name = "Direccion")
     @Schema(example = "CLL32 A # 99CC - 214")
     private String direccion;
+
+    @Column(name = "Estado")
+    private Boolean estado;
 }

@@ -83,9 +83,15 @@ public class MiembroController {
     public ResponseEntity<?> eliminarMiembro(@PathVariable String id) {
         try {
             miembroService.eliminar(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build(); // 204 No Content (Éxito)
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            // Evaluamos el mensaje para saber qué código HTTP mandar
+            if (e.getMessage().contains("no existe")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); // 404
+            }
+
+            // Si es por los préstamos activos, es un conflicto de regla de negocio
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); // 400
         }
     }
 }
