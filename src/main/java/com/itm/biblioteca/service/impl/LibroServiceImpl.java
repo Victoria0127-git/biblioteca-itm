@@ -2,6 +2,7 @@ package com.itm.biblioteca.service.impl;
 
 import com.itm.biblioteca.model.Libro;
 import com.itm.biblioteca.repository.LibroRepository;
+import com.itm.biblioteca.repository.PrestamoRepository;
 import com.itm.biblioteca.service.ILibroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LibroServiceImpl implements ILibroService {
     private final LibroRepository libroRepository;
+    private final PrestamoRepository prestamoRepository;
 
     @Override
     public List<Libro> listarTodos() {
@@ -75,7 +77,12 @@ public class LibroServiceImpl implements ILibroService {
     @Override
     public void eliminar(String isbn) {
         Libro libro = libroRepository.findById(isbn)
-                .orElseThrow(() -> new RuntimeException("No se encontró el libro"));
+                .orElseThrow(() -> new RuntimeException("No existe el libro con isbn "+ isbn));
+
+        //Verificar que no esté prestado
+        if (prestamoRepository.existsByEjemplar_Libro_IsbnAndFechaDevolucionIsNull(libro.getIsbn())) {
+            throw new RuntimeException("El libro no se puede eliminar porque tiene prestamos activos");
+        }
 
         libro.setEstado(false); // Cambia el BIT a 0 en SQL Server
         libroRepository.save(libro);
