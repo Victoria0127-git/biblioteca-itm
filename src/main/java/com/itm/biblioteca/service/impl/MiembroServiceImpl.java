@@ -2,6 +2,7 @@ package com.itm.biblioteca.service.impl;
 
 import com.itm.biblioteca.model.Miembro;
 import com.itm.biblioteca.repository.MiembroRepository;
+import com.itm.biblioteca.repository.PrestamoRepository;
 import com.itm.biblioteca.service.IMiembroService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MiembroServiceImpl implements IMiembroService {
     private final MiembroRepository miembroRepository;
+    private final PrestamoRepository prestamoRepository;
 
     @Override
     public List<Miembro> listarTodos() {
-        return miembroRepository.findAll();
+        return miembroRepository.findByEstadoTrue();
     }
 
     @Override
@@ -93,9 +95,16 @@ public class MiembroServiceImpl implements IMiembroService {
     @Transactional
     public void eliminar(String id) {
         // Verificamos si existe antes de intentar borrar
-        if (!miembroRepository.existsById(id)) {
-            throw new RuntimeException("No se puede eliminar: El miembro con ID " + id + " no existe.");
+        Miembro miembro = miembroRepository.findById(id)
+                        .orElseThrow(() -> new RuntimeException("El miembro no existe"));
+
+        //Verificar que no tenga prestamos activos
+        if (prestamoRepository.existsByMiembro_IdMiembroAndFechaDevolucionIsNull(miembro.getIdMiembro())){
+            throw new RuntimeException("El miembro no puede ser eliminado porque tiene prestamos activos");
         }
-        miembroRepository.deleteById(id);
+
+        //Implementación de eliminación lógica
+        miembro.setEstado(false);
+        miembroRepository.save(miembro);
     }
 }
