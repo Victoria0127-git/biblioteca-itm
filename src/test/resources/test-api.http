@@ -78,28 +78,6 @@ Content-Type: application/json
   "telefono": "3216745324"
 }
 
-###POST Miembro
-POST http://localhost:8080/api/miembro
-Content-Type: application/json
-
-{
-    "idMiembro": "M007",
-    "nombre": "Carlitos",
-    "apellido": "Garcia",
-    "telefono": "3003009871",
-    "correo": "GarciaCarlos@correo.com",
-    "direccion": "CLL 12AA #44BB -33"
-}
-
-###PUT miembro
-PUT http://localhost:8080/api/miembro/M007
-Content-Type: application/json
-
-{
-  "apellido": "Castro"
-}
-
-
 ###Get para ver los estados de ejemplares
 GET http://localhost:8080/api/ejemplares
 Accept: application/json
