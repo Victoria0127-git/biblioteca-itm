@@ -17,7 +17,7 @@ public class EjemplarServiceImpl implements IEjemplarService {
 
     @Override
     public List<Ejemplar> listarTodos() {
-        return ejemplarRepository.findAll();
+        return ejemplarRepository.findByLibroEstadoTrue();
     }
 
     @Override
