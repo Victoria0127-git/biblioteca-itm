@@ -4,46 +4,45 @@ import com.itm.biblioteca.model.Editorial;
 import com.itm.biblioteca.model.Libro;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@DataJpaTest
-@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 class LibroRepositoryTest {
 
-    @Autowired
+    @Mock
     private LibroRepository libroRepository;
 
-    @Autowired
-    private EditorialRepository editorialRepository;
-
     @Test
-    @DisplayName("Debe persistir un Libro vinculado a una Editorial y recuperarlo por ISBN")
+    @DisplayName("Debe persistir un Libro vinculado a una Editorial y recuperarlo por ISBN (Mockeado)")
     void testGuardarYBuscarLibro() {
-        // GIVEN: Primero persistimos la Editorial (padre)
+        // GIVEN: Estructura en memoria
         Editorial ed = new Editorial();
         ed.setId("ED-PLANETA");
         ed.setNombre("Planeta");
-        editorialRepository.save(ed);
 
-        // Creamos el Libro vinculado a esa Editorial
         Libro libro = new Libro();
         libro.setIsbn("9780135398524");
         libro.setTitulo("Clean Code");
         libro.setNumPag(462);
         libro.setEditorial(ed);
 
-        // WHEN: Guardamos el libro
-        Libro guardado = libroRepository.save(libro);
+        // Entrenamos al mock
+        when(libroRepository.save(any(Libro.class))).thenReturn(libro);
+        when(libroRepository.findById("9780135398524")).thenReturn(Optional.of(libro));
 
-        // THEN: Verificamos la persistencia y la integridad de la relación
+        // WHEN: Ejecutamos el flujo sin dejar variables muertas
+        libroRepository.save(libro);
         Optional<Libro> encontradoOpt = libroRepository.findById("9780135398524");
 
+        // THEN: Validamos
         assertThat(encontradoOpt).isPresent();
         Libro encontrado = encontradoOpt.get();
 

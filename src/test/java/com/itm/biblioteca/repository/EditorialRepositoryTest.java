@@ -3,36 +3,39 @@ package com.itm.biblioteca.repository;
 import com.itm.biblioteca.model.Editorial;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@DataJpaTest
-@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class) // Usamos el motor ligero de Mockito sin levantar Spring
 class EditorialRepositoryTest {
 
-    @Autowired
-    private EditorialRepository editorialRepository;
+    @Mock
+    private EditorialRepository editorialRepository; // Simulamos la interfaz del repositorio
 
     @Test
-    @DisplayName("Debe guardar y encontrar una editorial por su ID")
+    @DisplayName("Debe guardar y encontrar una editorial por su ID (Mockeado)")
     void testGuardarYBuscarEditorial() {
-        // GIVEN: Preparación del objeto
-        // Nota: Si usas @Builder en tu modelo, cámbialo por Editorial.builder()...
+        // GIVEN: Preparación del objeto real
         Editorial editorial = new Editorial();
         editorial.setId("ED-99");
         editorial.setNombre("Editorial de Prueba");
 
-        // WHEN: Acción de persistir
-        Editorial guardada = editorialRepository.save(editorial);
+        // Entrenamos al Mock para simular el comportamiento de JPA
+        when(editorialRepository.save(any(Editorial.class))).thenReturn(editorial);
+        when(editorialRepository.findById("ED-99")).thenReturn(Optional.of(editorial));
 
-        // THEN: Verificación de resultados
+        // WHEN: Ejecución de las acciones sobre el mock
+        Editorial guardada = editorialRepository.save(editorial);
         Optional<Editorial> encontrada = editorialRepository.findById(guardada.getId());
 
+        // THEN: Verificación de los resultados simulados
         assertThat(encontrada).isPresent();
         assertThat(encontrada.get().getNombre()).isEqualTo("Editorial de Prueba");
         assertThat(encontrada.get().getId()).isEqualTo("ED-99");

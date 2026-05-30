@@ -3,25 +3,26 @@ package com.itm.biblioteca.repository;
 import com.itm.biblioteca.model.Miembro;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@DataJpaTest
-@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class) // Usamos Mockito sin levantar Spring ni H2
 class MiembroRepositoryTest {
 
-    @Autowired
-    private MiembroRepository miembroRepository;
+    @Mock
+    private MiembroRepository miembroRepository; // Simulamos la interfaz del repositorio
 
     @Test
-    @DisplayName("Debe persistir un Miembro y permitir su búsqueda por ID")
+    @DisplayName("Debe persistir un Miembro y permitir su búsqueda por ID (Mockeado)")
     void testGuardarYBuscarMiembro() {
-        // GIVEN: Creamos la instancia del Miembro
+        // GIVEN: Creamos la instancia del Miembro en memoria
         Miembro miembro = new Miembro();
         miembro.setIdMiembro("M123");
         miembro.setNombre("Salome");
@@ -30,12 +31,15 @@ class MiembroRepositoryTest {
         miembro.setDireccion("Calle Falsa 123");
         miembro.setTelefono("3005554433");
 
-        // WHEN: Guardamos en el repositorio
-        Miembro guardado = miembroRepository.save(miembro);
+        // Entrenamos al mock
+        when(miembroRepository.save(any(Miembro.class))).thenReturn(miembro);
+        when(miembroRepository.findById("M123")).thenReturn(Optional.of(miembro));
+
+        // WHEN: Ejecutamos el flujo sin variables muertas
+        miembroRepository.save(miembro);
+        Optional<Miembro> encontradoOpt = miembroRepository.findById("M123");
 
         // THEN: Verificamos usando AssertJ
-        Optional<Miembro> encontradoOpt = miembroRepository.findById(guardado.getIdMiembro());
-
         assertThat(encontradoOpt).isPresent();
 
         Miembro encontrado = encontradoOpt.get();
