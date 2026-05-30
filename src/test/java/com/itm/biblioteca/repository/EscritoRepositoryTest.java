@@ -23,7 +23,7 @@ class EscritoRepositoryTest {
     @Test
     @DisplayName("Debe guardar un Escrito con sus relaciones de Libro, Autor y Editorial (Mockeado)")
     void testGuardarEscrito() {
-        // GIVEN: Construimos todo el árbol de objetos en memoria sin persistirlos en cascada
+        // GIVEN
 
         // 1. Editorial
         Editorial ed = new Editorial();
