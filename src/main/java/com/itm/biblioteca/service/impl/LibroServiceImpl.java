@@ -51,6 +51,8 @@ public class LibroServiceImpl implements ILibroService {
             throw new RuntimeException("Todo libro debe tener una editorial asignada.");
         }
 
+        libro.setEstado(true);
+
         return libroRepository.save(libro);
     }
 

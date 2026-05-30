@@ -48,6 +48,7 @@ public class MiembroServiceImpl implements IMiembroService {
                 .correo(miembro.getCorreo())
                 .telefono(miembro.getTelefono())
                 .direccion(miembro.getDireccion())
+                .estado(true)
                 .build();
 
         return miembroRepository.save(miembroNuevo);
